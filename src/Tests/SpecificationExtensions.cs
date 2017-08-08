@@ -64,27 +64,27 @@ namespace Tests
 
         public static void ShouldBeOfType(this object actual, Type expected)
         {
-            Assert.IsInstanceOfType(expected, actual);
+            Assert.IsInstanceOf(expected, actual);
         }
 
         public static void ShouldBeOfType<T>(this object actual)
         {
-            actual.ShouldBeOfType(typeof(T));
+            Assert.IsInstanceOf<T>(actual);
         }
 
         public static void ShouldNotBeOfType(this object actual, Type expected)
         {
-            Assert.IsNotInstanceOfType(expected, actual);
+            Assert.IsNotInstanceOf(expected, actual);
         }
 
         public static void ShouldNotBeOfType<T>(this object actual)
         {
-            actual.ShouldNotBeOfType(typeof(T));
+            Assert.IsNotInstanceOf<T>(actual);
         }
 
         public static void ShouldImplementType<T>(this object actual)
         {
-            typeof(T).IsAssignableFrom(actual.GetType()).ShouldBeTrue();
+            (actual is T).ShouldBeTrue();
         }
 
         public static void ShouldContain(this IList actual, object expected)
