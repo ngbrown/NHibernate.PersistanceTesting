@@ -10,7 +10,7 @@ namespace Tests
     {
         public Exception thrown_exception { get; private set; }
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             establish_context();
