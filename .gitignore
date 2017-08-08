@@ -1,6 +1,5 @@
 **/*.suo
 **/*.user
-**/*.sln*
 .vs/
 _ReSharper*
 
@@ -17,7 +16,6 @@ _ReSharper*
 *.ncrunchproject
 *.swp
 TestResult.xml
-Gemfile.lock
 
 src/packages
 bin
@@ -27,4 +25,3 @@ output
 build
 *.nupkg
 logs/
-src/CommonAssemblyInfo.cs
