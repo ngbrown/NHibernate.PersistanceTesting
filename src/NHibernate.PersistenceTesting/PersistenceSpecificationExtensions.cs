@@ -38,6 +38,22 @@ namespace NHibernate.PersistenceTesting
         }
 
         public static PersistenceSpecification<T> CheckProperty<T, TProperty>(this PersistenceSpecification<T> spec,
+                                                                   Expression<Func<TProperty>> expression)
+        {
+            return spec.CheckProperty(expression, (IEqualityComparer)null);
+        }
+
+        public static PersistenceSpecification<T> CheckProperty<T, TProperty>(this PersistenceSpecification<T> spec,
+                                                                    Expression<Func<TProperty>> expression,
+                                                                    IEqualityComparer propertyComparer)
+        {
+            Accessor property = ReflectionHelper.GetAccessor(expression);
+            TProperty propertyValue = expression.Compile().Invoke();
+
+            return spec.RegisterCheckedProperty(new Property<T, TProperty>(property, propertyValue), propertyComparer);
+        }
+
+        public static PersistenceSpecification<T> CheckProperty<T, TProperty>(this PersistenceSpecification<T> spec,
                                                                                Expression<Func<T, TProperty>> expression,
                                                                                TProperty propertyValue,
                                                                                Action<T, TProperty> propertySetter)
@@ -72,6 +88,22 @@ namespace NHibernate.PersistenceTesting
                                                                      IEqualityComparer propertyComparer)
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
+
+            return spec.RegisterCheckedProperty(new ReferenceProperty<T, TReference>(property, propertyValue), propertyComparer);
+        }
+
+        public static PersistenceSpecification<T> CheckReference<T, TReference>(this PersistenceSpecification<T> spec,
+                                                                     Expression<Func<TReference>> expression)
+        {
+            return spec.CheckReference(expression, (IEqualityComparer)null);
+        }
+
+        public static PersistenceSpecification<T> CheckReference<T, TReference>(this PersistenceSpecification<T> spec,
+                                                                     Expression<Func<TReference>> expression,
+                                                                     IEqualityComparer propertyComparer)
+        {
+            Accessor property = ReflectionHelper.GetAccessor(expression);
+            TReference propertyValue = expression.Compile().Invoke();
 
             return spec.RegisterCheckedProperty(new ReferenceProperty<T, TReference>(property, propertyValue), propertyComparer);
         }

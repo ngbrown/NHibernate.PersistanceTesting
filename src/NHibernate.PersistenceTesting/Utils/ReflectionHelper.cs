@@ -20,6 +20,13 @@ namespace NHibernate.PersistenceTesting.Utils
             return getAccessor(memberExpression);
         }
 
+        public static Accessor GetAccessor<T>(Expression<Func<T>> expression)
+        {
+            MemberExpression memberExpression = GetMemberExpression(expression.Body);
+
+            return getAccessor(memberExpression);
+        }
+
         private static MemberExpression GetMemberExpression(Expression expression)
         {
             return GetMemberExpression(expression, true);
@@ -54,6 +61,11 @@ namespace NHibernate.PersistenceTesting.Utils
             {
                 list.Add(memberExpression.Member.ToMember());
                 memberExpression = memberExpression.Expression as MemberExpression;
+            }
+
+            if (list[list.Count - 1].IsField)
+            {
+                list.RemoveAt(list.Count - 1);
             }
 
             if (list.Count == 1)

@@ -75,6 +75,35 @@ namespace Tests.Testing
     }
 
     [TestFixture]
+    public class When_a_checked_property_with_preset_value_is_added : With_persistence_specification<PropertyEntity>
+    {
+        public override void because()
+        {
+            var entity = new PropertyEntity() { GetterAndSetter = "test"};
+
+            sut.CheckProperty(() => entity.GetterAndSetter);
+        }
+
+        [Test]
+        public void should_add_a_property_check()
+        {
+            sut.AllProperties.First().ShouldBeOfType(typeof(Property<PropertyEntity, string>));
+        }
+
+        [Test]
+        public void should_add_one_check_to_the_specification()
+        {
+            sut.AllProperties.ShouldHaveCount(1);
+        }
+
+        [Test]
+        public void should_set_the_custom_equality_comparer()
+        {
+            sut.AllProperties.First().EntityEqualityComparer.ShouldEqual(comparer);
+        }
+    }
+
+    [TestFixture]
     public class When_a_checked_property_of_an_array_type_is_added : With_persistence_specification<ListEntity>
     {
         public override void because()
@@ -166,6 +195,35 @@ namespace Tests.Testing
         public override void because()
         {
             sut.CheckReference(x => x.Reference, new OtherEntity());
+        }
+
+        [Test]
+        public void should_add_a_reference_property_check()
+        {
+            sut.AllProperties.First().ShouldBeOfType(typeof(ReferenceProperty<ReferenceEntity, OtherEntity>));
+        }
+
+        [Test]
+        public void should_add_one_check_to_the_specification()
+        {
+            sut.AllProperties.ShouldHaveCount(1);
+        }
+
+        [Test]
+        public void should_set_the_custom_equality_comparer()
+        {
+            sut.AllProperties.First().EntityEqualityComparer.ShouldEqual(comparer);
+        }
+    }
+
+    [TestFixture]
+    public class When_a_checked_reference_with_preset_value_is_added : With_persistence_specification<ReferenceEntity>
+    {
+        public override void because()
+        {
+            var entity = new ReferenceEntity() { Reference = new OtherEntity() };
+
+            sut.CheckReference(() => entity.Reference);
         }
 
         [Test]

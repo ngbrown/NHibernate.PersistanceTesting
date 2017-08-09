@@ -62,6 +62,23 @@ namespace Tests.DomainModel
         }
 
         [Test]
+        public void MappingTest2()
+        {
+            var record = new Record()
+            {
+                Age = 22,
+                Name = "somebody",
+                Location = "somewhere",
+            };
+
+            new PersistenceSpecification<Record>(source.GetSession())
+                .CheckProperty(() => record.Age)
+                .CheckProperty(() => record.Name)
+                .CheckProperty(() => record.Location)
+                .VerifyTheMappings();
+        }
+
+        [Test]
         public void Mapping_test_with_arrays()
         {
             new PersistenceSpecification<BinaryRecord>(source.GetSession())
