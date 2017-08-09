@@ -1,0 +1,32 @@
+version: 1.1.0.{build}
+image: Visual Studio 2015
+configuration: Release
+platform: Any CPU
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}-{branch}'
+cache: src\packages -> **\packages.config
+before_build:
+- cmd: appveyor-retry nuget restore .\src\NHibernate.PersistenceTesting.sln
+build:
+  project: .\src\NHibernate.PersistenceTesting.sln
+  verbosity: minimal
+after_build:
+- ps: >-
+    if (${env:APPVEYOR_REPO_TAG} -eq $true) {
+      $semver = ${env:APPVEYOR_BUILD_VERSION}
+    } else {
+      $semver = ${env:APPVEYOR_BUILD_VERSION} -ireplace '(\d+.\d+.\d+).(\d+)', "`$1-ci-`$2-${env:APPVEYOR_REPO_BRANCH}"
+      $semver = $semver.Substring(0, [System.Math]::Min(20, $semver.Length))
+    }
+      nuget pack .\src\NHibernate.PersistenceTesting\NHibernate.PersistenceTesting.csproj -properties "Configuration=${env:CONFIGURATION};Platform=AnyCPU" -symbols -version $semver
+artifacts:
+- path: '*.nupkg'
+deploy:
+- provider: Environment
+  name: NuGet.org
+  on:
+    appveyor_repo_tag: true
