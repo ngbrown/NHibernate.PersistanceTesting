@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using NHibernate.PersistenceTesting.Utils;
 using NHibernate.PersistenceTesting.Values;
 
@@ -10,36 +11,30 @@ namespace NHibernate.PersistenceTesting
 {
     public static class PersistenceSpecificationExtensions
     {
-        public static PersistenceSpecification<T> CheckProperty<T>(this PersistenceSpecification<T> spec,
-                                                                   Expression<Func<T, object>> expression, object propertyValue)
+        public static PersistenceSpecification<T> CheckProperty<T, TProperty>(this PersistenceSpecification<T> spec,
+                                                                   Expression<Func<T, TProperty>> expression,
+                                                                   TProperty propertyValue)
         {
             return spec.CheckProperty(expression, propertyValue, (IEqualityComparer)null);
         }
 
-        public static PersistenceSpecification<T> CheckProperty<T>(this PersistenceSpecification<T> spec,
-                                                                    Expression<Func<T, object>> expression, object propertyValue,
+        public static PersistenceSpecification<T> CheckProperty<T, TProperty>(this PersistenceSpecification<T> spec,
+                                                                    Expression<Func<T, TProperty>> expression,
+                                                                    TProperty propertyValue,
                                                                     IEqualityComparer propertyComparer)
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
-            return spec.RegisterCheckedProperty(new Property<T, object>(property, propertyValue), propertyComparer);
-        }
-
-        public static PersistenceSpecification<T> CheckProperty<T, TListElement>(this PersistenceSpecification<T> spec,
-                                                                                 Expression<Func<T, Array>> expression,
-                                                                                 IEnumerable<TListElement> propertyValue)
-        {
-            return spec.CheckProperty(expression, propertyValue, null);
-        }
-
-        public static PersistenceSpecification<T> CheckProperty<T, TListElement>(this PersistenceSpecification<T> spec,
-                                                                                  Expression<Func<T, Array>> expression,
-                                                                                  IEnumerable<TListElement> propertyValue,
-                                                                                  IEqualityComparer elementComparer)
-        {
-            Accessor property = ReflectionHelper.GetAccessor(expression);
-
-            return spec.RegisterCheckedProperty(new List<T, TListElement>(property, propertyValue), elementComparer);
+            if (typeof(TProperty).IsArray)
+            {
+                // Func matching return value as TProperty is more specific than matching Array or TListElement[],
+                // so have to use reflection in array case instead of relying on generic matching.
+                return spec.RegisterCheckedProperty(ListConstructor<T, TProperty>.Create(property, propertyValue), propertyComparer);
+            }
+            else
+            {
+                return spec.RegisterCheckedProperty(new Property<T, TProperty>(property, propertyValue), propertyComparer);
+            }
         }
 
         public static PersistenceSpecification<T> CheckProperty<T, TProperty>(this PersistenceSpecification<T> spec,
@@ -64,21 +59,21 @@ namespace NHibernate.PersistenceTesting
             return spec.RegisterCheckedProperty(property, propertyComparer);
         }
 
-        public static PersistenceSpecification<T> CheckReference<T>(this PersistenceSpecification<T> spec,
-                                                                     Expression<Func<T, object>> expression,
-                                                                     object propertyValue)
+        public static PersistenceSpecification<T> CheckReference<T, TReference>(this PersistenceSpecification<T> spec,
+                                                                     Expression<Func<T, TReference>> expression,
+                                                                     TReference propertyValue)
         {
             return spec.CheckReference(expression, propertyValue, (IEqualityComparer)null);
         }
 
-        public static PersistenceSpecification<T> CheckReference<T>(this PersistenceSpecification<T> spec,
-                                                                     Expression<Func<T, object>> expression,
-                                                                     object propertyValue,
+        public static PersistenceSpecification<T> CheckReference<T, TReference>(this PersistenceSpecification<T> spec,
+                                                                     Expression<Func<T, TReference>> expression,
+                                                                     TReference propertyValue,
                                                                      IEqualityComparer propertyComparer)
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
-            return spec.RegisterCheckedProperty(new ReferenceProperty<T, object>(property, propertyValue), propertyComparer);
+            return spec.RegisterCheckedProperty(new ReferenceProperty<T, TReference>(property, propertyValue), propertyComparer);
         }
 
         public static PersistenceSpecification<T> CheckReference<T, TReference>(this PersistenceSpecification<T> spec,
@@ -119,7 +114,6 @@ namespace NHibernate.PersistenceTesting
         public static PersistenceSpecification<T> CheckList<T, TListElement>(this PersistenceSpecification<T> spec,
                                                                               Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                               IEnumerable<TListElement> propertyValue)
-        
         {
             return spec.CheckList(expression, propertyValue, (IEqualityComparer)null);
         }
@@ -239,7 +233,6 @@ namespace NHibernate.PersistenceTesting
                                                                               IEnumerable<TListElement> propertyValue,
                                                                               IEqualityComparer elementComparer,
                                                                               Action<T, IEnumerable<TListElement>> listSetter)
-
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -510,6 +503,25 @@ namespace NHibernate.PersistenceTesting
             public override int GetHashCode(T obj)
             {
                 throw new NotSupportedException();
+            }
+        }
+
+        private static class ListConstructor<T, TProperty>
+        {
+            // ReSharper disable once StaticMemberInGenericType
+            private static ConstructorInfo listConstructor;
+
+            public static Property<T> Create(Accessor property, TProperty propertyValue)
+            {
+                if (listConstructor == null)
+                {
+                    var elementType = typeof(TProperty).GetElementType();
+                    var ienumerableType = typeof(IEnumerable<>).MakeGenericType(elementType);
+                    var listType = typeof(List<,>).MakeGenericType(typeof(T), elementType);
+                    listConstructor = listType.GetConstructor(new[] {typeof(Accessor), ienumerableType});
+                }
+
+                return (Property<T>)listConstructor.Invoke(new object[] { property, propertyValue });
             }
         }
     }

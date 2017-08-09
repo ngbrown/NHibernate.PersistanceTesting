@@ -58,7 +58,7 @@ namespace Tests.Testing
         [Test]
         public void should_add_a_property_check()
         {
-            sut.AllProperties.First().ShouldBeOfType(typeof(Property<PropertyEntity, object>));
+            sut.AllProperties.First().ShouldBeOfType(typeof(Property<PropertyEntity, string>));
         }
 
         [Test]
@@ -171,7 +171,7 @@ namespace Tests.Testing
         [Test]
         public void should_add_a_reference_property_check()
         {
-            sut.AllProperties.First().ShouldBeOfType(typeof(ReferenceProperty<ReferenceEntity, object>));
+            sut.AllProperties.First().ShouldBeOfType(typeof(ReferenceProperty<ReferenceEntity, OtherEntity>));
         }
 
         [Test]
