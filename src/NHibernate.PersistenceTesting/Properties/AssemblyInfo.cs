@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("https://github.com/ngbrown/NHibernate.PersistanceTesting")]
 [assembly: AssemblyProduct("NHibernate.PersistenceTesting")]
-[assembly: AssemblyCopyright("Copyright 2008-2017 James Gregory and contributors (Paul Batum, Hudson Akridge, Nathan Brown et al). All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright 2017 Nathan Brown and contributors. Copyright 2008-2015 James Gregory and contributors (Paul Batum, Hudson Akridge et al).  All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

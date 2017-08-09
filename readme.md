@@ -107,5 +107,6 @@ Obviously, the sample provided here won't work because the `Store` object is tra
 # Contributors
 For list of contributors, see [Fluent NHibernate](https://github.com/jagregory/fluent-nhibernate).
 
-Fluent NHibernate is &copy; 2008-2015 [James Gregory](http://jagregory.com) and contributors under the [BSD license](https://github.com/jagregory/fluent-nhibernate/blob/master/fluent-nhibernate/blob/master/LICENSE.txt)
+NHibernate.PersistenceTesting is &copy; 2017 [Nathan Brown](https://github.com/ngbrown) and contributors and &copy; 2008-2015 [James Gregory](http://jagregory.com) and contributors under the [BSD license](https://github.com/ngbrown/NHibernate.PersistanceTesting/blob/master/LICENSE.txt)
 
+Fluent NHibernate is &copy; 2008-2015 [James Gregory](http://jagregory.com) and contributors under the [BSD license](https://github.com/jagregory/fluent-nhibernate/blob/master/fluent-nhibernate/blob/master/LICENSE.txt)
