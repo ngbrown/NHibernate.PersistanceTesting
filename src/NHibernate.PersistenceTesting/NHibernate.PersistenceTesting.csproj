@@ -42,6 +42,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DateTimeEqualityComparer.cs" />
+    <Compile Include="DateTimeOffsetEqualityComparer.cs" />
     <Compile Include="MissingConstructorException.cs" />
     <Compile Include="PersistenceSpecification.cs" />
     <Compile Include="PersistenceSpecificationExtensions.cs" />

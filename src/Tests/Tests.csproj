@@ -60,8 +60,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DomainModel\ConnectedTester.cs" />
+    <Compile Include="DomainModel\DateTimeOffsetISO8601StringType.cs" />
     <Compile Include="DomainModel\Entity.cs" />
     <Compile Include="SingleConnectionSessionSourceForSQLiteInMemoryTesting.cs" />
+    <Compile Include="Testing\EqualityComparerSpecs.cs" />
     <Compile Include="Testing\PersistenceSpecificationExtensionsSpecs.cs" />
     <Compile Include="Testing\PersistenceSpecificationTester.cs" />
     <Compile Include="Testing\PersistenceSpecificationTransactionTest.cs" />

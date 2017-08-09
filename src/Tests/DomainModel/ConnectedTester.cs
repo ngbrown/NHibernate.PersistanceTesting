@@ -1,4 +1,5 @@
-﻿using NHibernate;
+﻿using System;
+using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Dialect;
@@ -6,6 +7,7 @@ using NHibernate.Driver;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.PersistenceTesting;
+using NHibernate.Type;
 using NUnit.Framework;
 
 namespace Tests.DomainModel
@@ -42,6 +44,8 @@ namespace Tests.DomainModel
             mapper.AddMapping<RecordMap>();
             mapper.AddMapping<BinaryRecordMap>();
             mapper.AddMapping<RecordWithNullablePropertyMap>();
+            mapper.AddMapping<DateTimeRecordMap>();
+            mapper.AddMapping<DateTimeOffsetRecordMap>();
             var mapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
             mapping.defaultlazy = true;
             return mapping;
@@ -82,6 +86,22 @@ namespace Tests.DomainModel
                 .CheckProperty(x => x.Age, null)
                 .CheckProperty(x => x.Name, "somebody")
                 .CheckProperty(x => x.Location, "somewhere")
+                .VerifyTheMappings();
+        }
+
+        [Test]
+        public void MappingTest_DateProperty()
+        {
+            new PersistenceSpecification<DateTimeRecord>(source.GetSession())
+                .CheckProperty(x => x.DateValue, DateTime.Now, new DateTimeEqualityComparer(TimeSpan.FromSeconds(1)))
+                .VerifyTheMappings();
+        }
+
+        [Test]
+        public void MappingTest_DateTimeOffsetProperty()
+        {
+            new PersistenceSpecification<DateTimeOffsetRecord>(source.GetSession())
+                .CheckProperty(x => x.DateValue, DateTimeOffset.Now, new DateTimeOffsetEqualityComparer(TimeSpan.FromSeconds(1)))
                 .VerifyTheMappings();
         }
     }
@@ -181,5 +201,41 @@ namespace Tests.DomainModel
         public virtual string Name { get; set; }
         public virtual int? Age { get; set; }
         public virtual string Location { get; set; }
+    }
+
+    public class DateTimeRecordMap : ClassMapping<DateTimeRecord>
+    {
+        public DateTimeRecordMap()
+        {
+            Id(x => x.Id, map => map.Column("id"));
+            Property(x => x.DateValue, map =>
+            {
+                map.NotNullable(true);
+                map.Type<LocalDateTimeType>();
+            });
+        }
+    }
+
+    public class DateTimeRecord : Entity
+    {
+        public virtual DateTime DateValue { get; set; }
+    }
+
+    public class DateTimeOffsetRecordMap : ClassMapping<DateTimeOffsetRecord>
+    {
+        public DateTimeOffsetRecordMap()
+        {
+            Id(x => x.Id, map => map.Column("id"));
+            Property(x => x.DateValue, map =>
+            {
+                map.NotNullable(true);
+                map.Type<DateTimeOffsetISO8601StringType>();
+            });
+        }
+    }
+
+    public class DateTimeOffsetRecord : Entity
+    {
+        public virtual DateTimeOffset DateValue { get; set; }
     }
 }
