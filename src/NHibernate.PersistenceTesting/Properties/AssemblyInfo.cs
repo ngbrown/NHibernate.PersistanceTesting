@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("NHibernate.PersistenceTesting")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Quickly test your NHibernate mappings using the PersistenceSpecification class")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("https://github.com/ngbrown/NHibernate.PersistanceTesting")]
 [assembly: AssemblyProduct("NHibernate.PersistenceTesting")]

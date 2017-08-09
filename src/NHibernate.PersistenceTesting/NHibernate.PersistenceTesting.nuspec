@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/ngbrown/NHibernate.PersistanceTesting/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/ngbrown/NHibernate.PersistanceTesting</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <copyright>Copyright 2017 Nathan Brown and contributors.  Copyright 2008-2015 James Gregory and contributors.</copyright>
+    <tags>NHibernate testing tdd</tags>
+  </metadata>
+</package>
