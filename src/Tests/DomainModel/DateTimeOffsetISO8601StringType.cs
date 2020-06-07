@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Globalization;
+using NHibernate.Engine;
 using NHibernate.SqlTypes;
 using NHibernate.Type;
 
@@ -23,14 +25,14 @@ namespace Tests.DomainModel
             get { return SqlTypeFactory.GetAnsiString(35); }
         }
 
-        public override void Set(IDbCommand st, object value, int index)
+        public override void Set(DbCommand st, object value, int index, ISessionImplementor session)
         {
             var dateTimeOffset = (DateTimeOffset)value;
             // purpously shortened to simulate saving to a server that supports DateTimeOffset, but not to the full resolution.
             ((IDataParameter)st.Parameters[index]).Value = dateTimeOffset.ToString(DateTimeOffsetStringFormat, CultureInfo.InvariantCulture);
         }
 
-        public override object Get(IDataReader rs, int index)
+        public override object Get(DbDataReader rs, int index, ISessionImplementor session)
         {
             try
             {

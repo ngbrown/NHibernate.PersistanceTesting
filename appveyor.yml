@@ -1,5 +1,5 @@
-version: 1.2.0.{build}
-image: Visual Studio 2015
+version: 1.3.0.{build}
+image: Visual Studio 2019
 configuration: Release
 platform: Any CPU
 assembly_info:
@@ -8,21 +8,19 @@ assembly_info:
   assembly_version: '{version}'
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}-{branch}'
-cache: src\packages -> **\packages.config
-before_build:
-- cmd: appveyor-retry nuget restore .\src\NHibernate.PersistenceTesting.sln
+cache: '%USERPROFILE%\.nuget\packages -> **\*.csproj'
 build:
   project: .\src\NHibernate.PersistenceTesting.sln
   verbosity: minimal
 after_build:
 - ps: >-
     if (${env:APPVEYOR_REPO_TAG} -eq $true) {
-      $semver = ${env:APPVEYOR_BUILD_VERSION}
+      $semver = ${env:APPVEYOR_REPO_TAG}
     } else {
       $semver = ${env:APPVEYOR_BUILD_VERSION} -ireplace '(\d+.\d+.\d+).(\d+)', "`$1-ci-`$2-${env:APPVEYOR_REPO_BRANCH}"
       $semver = $semver.Substring(0, [System.Math]::Min(20, $semver.Length))
     }
-      nuget pack .\src\NHibernate.PersistenceTesting\NHibernate.PersistenceTesting.csproj -properties "Configuration=${env:CONFIGURATION};Platform=AnyCPU" -symbols -version $semver
+    dotnet pack .\src\NHibernate.PersistenceTesting\NHibernate.PersistenceTesting.csproj --configuration "${env:CONFIGURATION}" --include-symbols "-p:PackageVersion=${semver}"
 artifacts:
 - path: '*.nupkg'
 deploy:
