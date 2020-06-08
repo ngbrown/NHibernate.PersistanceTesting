@@ -2,25 +2,24 @@ version: 1.3.0.{build}
 image: Visual Studio 2019
 configuration: Release
 platform: Any CPU
-assembly_info:
-  patch: true
-  file: '**\AssemblyInfo.*'
-  assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}-{branch}'
-cache: '%USERPROFILE%\.nuget\packages -> **\*.csproj'
-build:
-  project: .\src\NHibernate.PersistenceTesting.sln
-  verbosity: minimal
-after_build:
+build_script:
 - ps: >-
+    dotnet add .\src\Tests\Tests.csproj package Appveyor.TestLogger --version 2.0.0
+
     if (${env:APPVEYOR_REPO_TAG} -eq $true) {
-      $semver = ${env:APPVEYOR_REPO_TAG}
+      $env:semver = $env:APPVEYOR_REPO_TAG_NAME
+      dotnet build .\src\NHibernate.PersistenceTesting.sln --configuration $env:CONFIGURATION "-p:VersionPrefix=${env:semver}"
+      dotnet pack .\src\NHibernate.PersistenceTesting\NHibernate.PersistenceTesting.csproj --configuration $env:CONFIGURATION --include-symbols --output ./ "-p:VersionPrefix=${env:semver}"
     } else {
-      $semver = ${env:APPVEYOR_BUILD_VERSION} -ireplace '(\d+.\d+.\d+).(\d+)', "`$1-ci-`$2-${env:APPVEYOR_REPO_BRANCH}"
-      $semver = $semver.Substring(0, [System.Math]::Min(20, $semver.Length))
+      $env:semver = $env:APPVEYOR_BUILD_VERSION -ireplace '(\d+.\d+.\d+).(\d+)', "`$1"
+      $suffix = "ci-${env:APPVEYOR_BUILD_NUMBER}-${env:APPVEYOR_REPO_BRANCH}"
+      $env:suffix = $suffix.Substring(0, [System.Math]::Min(10, $suffix.Length))
+      dotnet build .\src\NHibernate.PersistenceTesting.sln --configuration $env:CONFIGURATION "-p:VersionPrefix=${env:semver}" --version-suffix $env:suffix
+      dotnet pack .\src\NHibernate.PersistenceTesting\NHibernate.PersistenceTesting.csproj --configuration $env:CONFIGURATION --include-symbols --output ./ "-p:VersionPrefix=${env:semver}" --version-suffix $env:suffix
     }
-    dotnet pack .\src\NHibernate.PersistenceTesting\NHibernate.PersistenceTesting.csproj --configuration "${env:CONFIGURATION}" --include-symbols "-p:PackageVersion=${semver}"
+test_script:
+- ps: >-
+    dotnet test .\src\Tests\bin\Release\netcoreapp2.1\Tests.dll --logger:Appveyor
 artifacts:
 - path: '*.nupkg'
 deploy:
