@@ -10,6 +10,9 @@ namespace NHibernate.PersistenceTesting
             : base("'" + type.AssemblyQualifiedName + "' is missing a parameterless constructor.")
         {}
 
+#if NET8_0_OR_GREATER
+        [Obsolete(DiagnosticId = "SYSLIB0051")]
+#endif
         protected MissingConstructorException(SerializationInfo info, StreamingContext context) : base(info, context)
         {}
     }

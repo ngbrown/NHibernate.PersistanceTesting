@@ -416,7 +416,7 @@ namespace Tests.Testing.Values
         public void should_perform_the_check_with_the_custom_equality_comparer()
         {
             A.CallTo(() => sut.EntityEqualityComparer.Equals(null, null))
-                .WithAnyArguments().MustHaveHappened(Repeated.Exactly.Times(3));
+                .WithAnyArguments().MustHaveHappened(3, Times.Exactly);
         }
     }
 
@@ -442,7 +442,7 @@ namespace Tests.Testing.Values
         {
             A.CallTo(() => sut.EntityEqualityComparer.Equals(null, null))
                 .WithAnyArguments()
-                .MustHaveHappened(Repeated.Exactly.Once);
+                .MustHaveHappened(1, Times.Exactly);
         }
     }
 
