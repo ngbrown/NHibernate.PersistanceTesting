@@ -7,6 +7,7 @@ using NHibernate.PersistenceTesting.Utils;
 namespace NHibernate.PersistenceTesting.Values
 {
     public class List<T, TListElement> : Property<T, IEnumerable<TListElement>>
+        where T : class
     {
         private readonly IEnumerable<TListElement> _expected;
         private Action<T, Accessor, IEnumerable<TListElement>> _valueSetter;

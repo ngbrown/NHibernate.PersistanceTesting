@@ -12,6 +12,7 @@ using Tests.Testing.Values;
 namespace Tests.Testing
 {
     public class InspectablePersistenceSpecification<T> : PersistenceSpecification<T>
+        where T : class
     {
         public InspectablePersistenceSpecification(ISessionFactory sessionFactory) : base(sessionFactory)
         { }
@@ -32,6 +33,7 @@ namespace Tests.Testing
     }
 
     public abstract class With_persistence_specification<T> : Specification
+        where T : class
     {
         private ISession session;
         protected InspectablePersistenceSpecification<T> sut;

@@ -5,6 +5,7 @@ using NHibernate.PersistenceTesting.Utils;
 namespace NHibernate.PersistenceTesting.Values
 {
     public abstract class Property<T>
+        where T : class
     {
         public IEqualityComparer EntityEqualityComparer { get; set; }
         public abstract void SetValue(T target);
@@ -15,6 +16,7 @@ namespace NHibernate.PersistenceTesting.Values
     }
 
     public class Property<T, TProperty> : Property<T>
+        where T : class
     {
         private static readonly Action<T, Accessor, TProperty> DefaultValueSetter = (target, propertyAccessor, value) => propertyAccessor.SetValue (target, value);
         private readonly Accessor _propertyAccessor;
