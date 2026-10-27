@@ -46,6 +46,7 @@ namespace Tests.DomainModel
             mapper.AddMapping<RecordWithNullablePropertyMap>();
             mapper.AddMapping<DateTimeRecordMap>();
             mapper.AddMapping<DateTimeOffsetRecordMap>();
+            mapper.AddMapping<RecordWithStructComponentMap>();
             var mapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
             mapping.defaultlazy = true;
             return mapping;
@@ -119,6 +120,14 @@ namespace Tests.DomainModel
         {
             new PersistenceSpecification<DateTimeOffsetRecord>(source.GetSession())
                 .CheckProperty(x => x.DateValue, DateTimeOffset.Now, new DateTimeOffsetEqualityComparer(TimeSpan.FromSeconds(1)))
+                .VerifyTheMappings();
+        }
+
+        [Test]
+        public void MappingTest_StructComponent()
+        {
+            new PersistenceSpecification<RecordWithStructComponent>(source.GetSession())
+                .CheckProperty(x => x.Component, new StructComponent { Number = 22, Name = "somebody" })
                 .VerifyTheMappings();
         }
     }
@@ -254,5 +263,29 @@ namespace Tests.DomainModel
     public class DateTimeOffsetRecord : Entity
     {
         public virtual DateTimeOffset DateValue { get; set; }
+    }
+
+    public class RecordWithStructComponentMap : ClassMapping<RecordWithStructComponent>
+    {
+        public RecordWithStructComponentMap()
+        {
+            Id(x => x.Id);
+            Component(x => x.Component, map =>
+            {
+                map.Property(x => x.Number);
+                map.Property(x => x.Name);
+            });
+        }
+    }
+
+    public class RecordWithStructComponent : Entity
+    {
+        public virtual StructComponent Component { get; set; }
+    }
+
+    public struct StructComponent
+    {
+        public int Number { get; set; }
+        public string Name { get; set; }
     }
 }
