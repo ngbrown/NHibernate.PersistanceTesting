@@ -4,13 +4,14 @@
     <TargetFrameworks>netstandard2.0;net40;netcoreapp2.0</TargetFrameworks>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/ngbrown/NHibernate.PersistanceTesting</PackageProjectUrl>
-    <Copyright>Copyright 2017-2020 Nathan Brown and contributors.  Copyright 2008-2015 James Gregory and contributors.</Copyright>
+    <Copyright>Copyright 2017-2026 Nathan Brown and contributors.  Copyright 2008-2015 James Gregory and contributors.</Copyright>
     <PackageTags>NHibernate testing tdd</PackageTags>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>Quickly test your NHibernate mappings using the PersistenceSpecification class</Description>
     <Company>https://github.com/ngbrown/NHibernate.PersistanceTesting</Company>
     <Authors>Nathan Brown, James Gregory, and contributors</Authors>
     <RepositoryUrl>https://github.com/ngbrown/NHibernate.PersistanceTesting</RepositoryUrl>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net40'">
