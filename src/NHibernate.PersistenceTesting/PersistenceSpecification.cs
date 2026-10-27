@@ -6,6 +6,7 @@ using NHibernate.PersistenceTesting.Values;
 namespace NHibernate.PersistenceTesting
 {
     public class PersistenceSpecification<T>
+        where T : class
     {
         protected readonly List<Property<T>> allProperties = new List<Property<T>>();
         private readonly ISession currentSession;

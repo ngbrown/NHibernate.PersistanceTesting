@@ -4,6 +4,7 @@ using NHibernate.PersistenceTesting.Utils;
 namespace NHibernate.PersistenceTesting.Values
 {
     public class ReferenceList<T, TListElement> : List<T, TListElement>
+        where T : class
     {
         public ReferenceList(Accessor property, IEnumerable<TListElement> value)
             : base(property, value)

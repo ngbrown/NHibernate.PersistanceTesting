@@ -14,6 +14,7 @@ namespace NHibernate.PersistenceTesting
         public static PersistenceSpecification<T> CheckProperty<T, TProperty>(this PersistenceSpecification<T> spec,
                                                                    Expression<Func<T, TProperty>> expression,
                                                                    TProperty propertyValue)
+            where T : class
         {
             return spec.CheckProperty(expression, propertyValue, (IEqualityComparer)null);
         }
@@ -22,6 +23,7 @@ namespace NHibernate.PersistenceTesting
                                                                     Expression<Func<T, TProperty>> expression,
                                                                     TProperty propertyValue,
                                                                     IEqualityComparer propertyComparer)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -39,6 +41,7 @@ namespace NHibernate.PersistenceTesting
 
         public static PersistenceSpecification<T> CheckProperty<T, TProperty>(this PersistenceSpecification<T> spec,
                                                                    Expression<Func<TProperty>> expression)
+            where T : class
         {
             return spec.CheckProperty(expression, (IEqualityComparer)null);
         }
@@ -46,6 +49,7 @@ namespace NHibernate.PersistenceTesting
         public static PersistenceSpecification<T> CheckProperty<T, TProperty>(this PersistenceSpecification<T> spec,
                                                                     Expression<Func<TProperty>> expression,
                                                                     IEqualityComparer propertyComparer)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
             TProperty propertyValue = expression.Compile().Invoke();
@@ -57,6 +61,7 @@ namespace NHibernate.PersistenceTesting
                                                                                Expression<Func<T, TProperty>> expression,
                                                                                TProperty propertyValue,
                                                                                Action<T, TProperty> propertySetter)
+            where T : class
         {
             return spec.CheckProperty(expression, propertyValue, null, propertySetter);
         }
@@ -66,6 +71,7 @@ namespace NHibernate.PersistenceTesting
                                                                               TProperty propertyValue,
                                                                               IEqualityComparer propertyComparer,
                                                                               Action<T, TProperty> propertySetter)
+            where T : class
         {
             Accessor propertyInfoFromExpression = ReflectionHelper.GetAccessor(expression);
 
@@ -78,6 +84,7 @@ namespace NHibernate.PersistenceTesting
         public static PersistenceSpecification<T> CheckReference<T, TReference>(this PersistenceSpecification<T> spec,
                                                                      Expression<Func<T, TReference>> expression,
                                                                      TReference propertyValue)
+            where T : class
         {
             return spec.CheckReference(expression, propertyValue, (IEqualityComparer)null);
         }
@@ -86,6 +93,7 @@ namespace NHibernate.PersistenceTesting
                                                                      Expression<Func<T, TReference>> expression,
                                                                      TReference propertyValue,
                                                                      IEqualityComparer propertyComparer)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -94,6 +102,7 @@ namespace NHibernate.PersistenceTesting
 
         public static PersistenceSpecification<T> CheckReference<T, TReference>(this PersistenceSpecification<T> spec,
                                                                      Expression<Func<TReference>> expression)
+            where T : class
         {
             return spec.CheckReference(expression, (IEqualityComparer)null);
         }
@@ -101,6 +110,7 @@ namespace NHibernate.PersistenceTesting
         public static PersistenceSpecification<T> CheckReference<T, TReference>(this PersistenceSpecification<T> spec,
                                                                      Expression<Func<TReference>> expression,
                                                                      IEqualityComparer propertyComparer)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
             TReference propertyValue = expression.Compile().Invoke();
@@ -112,6 +122,7 @@ namespace NHibernate.PersistenceTesting
                                                                    Expression<Func<T, object>> expression,
                                                                    TReference propertyValue,
                                                                    params Func<TReference, object>[] propertiesToCompare)
+            where T : class
         {
             // Because of the params keyword, the compiler will select this overload
             // instead of the one above, even when no funcs are supplied in the method call.
@@ -125,6 +136,7 @@ namespace NHibernate.PersistenceTesting
                                                                                 Expression<Func<T, TProperty>> expression,
                                                                                 TProperty propertyValue,
                                                                                 Action<T, TProperty> propertySetter)
+            where T : class
         {
             return spec.CheckReference(expression, propertyValue, null, propertySetter);
         }
@@ -134,6 +146,7 @@ namespace NHibernate.PersistenceTesting
                                                                                TProperty propertyValue,
                                                                                IEqualityComparer propertyComparer,
                                                                                Action<T, TProperty> propertySetter)
+            where T : class
         {
             Accessor propertyInfoFromExpression = ReflectionHelper.GetAccessor(expression);
 
@@ -146,6 +159,7 @@ namespace NHibernate.PersistenceTesting
         public static PersistenceSpecification<T> CheckList<T, TListElement>(this PersistenceSpecification<T> spec,
                                                                               Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                               IEnumerable<TListElement> propertyValue)
+            where T : class
         {
             return spec.CheckList(expression, propertyValue, (IEqualityComparer)null);
         }
@@ -154,6 +168,7 @@ namespace NHibernate.PersistenceTesting
                                                                               Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                               IEnumerable<TListElement> propertyValue,
                                                                               IEqualityComparer elementComparer)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -164,6 +179,7 @@ namespace NHibernate.PersistenceTesting
                                                                             Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                             IEnumerable<TListElement> propertyValue,
                                                                             params Func<TListElement, object>[] propertiesToCompare)
+            where T : class
         {
             // Because of the params keyword, the compiler can select this overload
             // instead of the one above, even when no funcs are supplied in the method call.
@@ -177,6 +193,7 @@ namespace NHibernate.PersistenceTesting
                                                                               Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                               IEnumerable<TListElement> propertyValue,
                                                                               IEqualityComparer elementComparer)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -187,6 +204,7 @@ namespace NHibernate.PersistenceTesting
                                                                                     Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                                     IEnumerable<TListElement> propertyValue,
                                                                                     params Func<TListElement, object>[] propertiesToCompare)
+            where T : class
         {
             // Because of the params keyword, the compiler can select this overload
             // instead of the one above, even when no funcs are supplied in the method call.
@@ -200,6 +218,7 @@ namespace NHibernate.PersistenceTesting
                                                                               Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                               IEnumerable<TListElement> propertyValue,
                                                                               Action<T, TListElement> listItemSetter)
+            where T : class
         {
             return spec.CheckList(expression, propertyValue, null, listItemSetter);
         }
@@ -208,6 +227,7 @@ namespace NHibernate.PersistenceTesting
                                                                               Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                               IEnumerable<TListElement> propertyValue,
                                                                               Action<T, TListElement> listItemSetter)
+            where T : class
         {
             return spec.CheckInverseList(expression, propertyValue, null, listItemSetter);
         }
@@ -217,6 +237,7 @@ namespace NHibernate.PersistenceTesting
                                                                              IEnumerable<TListElement> propertyValue,
                                                                              IEqualityComparer elementComparer,
                                                                              Action<T, TListElement> listItemSetter)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -237,6 +258,7 @@ namespace NHibernate.PersistenceTesting
                                                                               IEnumerable<TListElement> propertyValue,
                                                                               IEqualityComparer elementComparer,
                                                                               Action<T, TListElement> listItemSetter)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -256,6 +278,7 @@ namespace NHibernate.PersistenceTesting
                                                                               Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                               IEnumerable<TListElement> propertyValue,
                                                                               Action<T, IEnumerable<TListElement>> listSetter)
+            where T : class
         {
             return spec.CheckList(expression, propertyValue, null, listSetter);
         }
@@ -265,6 +288,7 @@ namespace NHibernate.PersistenceTesting
                                                                               IEnumerable<TListElement> propertyValue,
                                                                               IEqualityComparer elementComparer,
                                                                               Action<T, IEnumerable<TListElement>> listSetter)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -278,6 +302,7 @@ namespace NHibernate.PersistenceTesting
         public static PersistenceSpecification<T> CheckInverseBag<T, TListElement>(this PersistenceSpecification<T> spec,
                                                                               Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                               IEnumerable<TListElement> propertyValue)
+            where T : class
         {
             return spec.CheckInverseBag(expression, propertyValue, (IEqualityComparer)null);
         }
@@ -286,6 +311,7 @@ namespace NHibernate.PersistenceTesting
                                                                               Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                               IEnumerable<TListElement> propertyValue,
                                                                               IEqualityComparer elementComparer)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -296,6 +322,7 @@ namespace NHibernate.PersistenceTesting
                                                                             Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                             IEnumerable<TListElement> propertyValue,
                                                                             params Func<TListElement, object>[] propertiesToCompare)
+            where T : class
         {
             // Because of the params keyword, the compiler can select this overload
             // instead of the one above, even when no funcs are supplied in the method call.
@@ -309,6 +336,7 @@ namespace NHibernate.PersistenceTesting
                                                                              Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                              IEnumerable<TListElement> propertyValue,
                                                                              Action<T, TListElement> listItemSetter)
+            where T : class
         {
             return spec.CheckInverseBag(expression, propertyValue, null, listItemSetter);
         }
@@ -317,6 +345,7 @@ namespace NHibernate.PersistenceTesting
                                                                             Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                             IEnumerable<TListElement> propertyValue,
                                                                             Action<T, IEnumerable<TListElement>> listSetter)
+            where T : class
         {
             return spec.CheckInverseBag(expression, propertyValue, null, listSetter);
         }
@@ -326,6 +355,7 @@ namespace NHibernate.PersistenceTesting
                                                                              IEnumerable<TListElement> propertyValue,
                                                                              IEqualityComparer elementComparer,
                                                                              Action<T, TListElement> listItemSetter)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -346,6 +376,7 @@ namespace NHibernate.PersistenceTesting
                                                                              IEnumerable<TListElement> propertyValue,
                                                                              IEqualityComparer elementComparer,
                                                                              Action<T, IEnumerable<TListElement>> listSetter)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -358,6 +389,7 @@ namespace NHibernate.PersistenceTesting
         public static PersistenceSpecification<T> CheckBag<T, TListElement>(this PersistenceSpecification<T> spec,
                                                                               Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                               IEnumerable<TListElement> propertyValue)
+            where T : class
         {
             return spec.CheckBag(expression, propertyValue, (IEqualityComparer)null);
         }
@@ -366,6 +398,7 @@ namespace NHibernate.PersistenceTesting
                                                                               Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                               IEnumerable<TListElement> propertyValue,
                                                                               IEqualityComparer elementComparer)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -376,6 +409,7 @@ namespace NHibernate.PersistenceTesting
                                                                             Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                             IEnumerable<TListElement> propertyValue,
                                                                             params Func<TListElement, object>[] propertiesToCompare)
+            where T : class
         {
             // Because of the params keyword, the compiler can select this overload
             // instead of the one above, even when no funcs are supplied in the method call.
@@ -389,6 +423,7 @@ namespace NHibernate.PersistenceTesting
                                                                              Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                              IEnumerable<TListElement> propertyValue,
                                                                              Action<T, TListElement> listItemSetter)
+            where T : class
         {
             return spec.CheckBag(expression, propertyValue, null, listItemSetter);
         }
@@ -397,6 +432,7 @@ namespace NHibernate.PersistenceTesting
                                                                             Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                             IEnumerable<TListElement> propertyValue,
                                                                             Action<T, IEnumerable<TListElement>> listSetter)
+            where T : class
         {
             return spec.CheckBag(expression, propertyValue, null, listSetter);
         }
@@ -406,6 +442,7 @@ namespace NHibernate.PersistenceTesting
                                                                              IEnumerable<TListElement> propertyValue,
                                                                              IEqualityComparer elementComparer,
                                                                              Action<T, TListElement> listItemSetter)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -426,6 +463,7 @@ namespace NHibernate.PersistenceTesting
                                                                              IEnumerable<TListElement> propertyValue,
                                                                              IEqualityComparer elementComparer,
                                                                              Action<T, IEnumerable<TListElement>> listSetter)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -438,6 +476,7 @@ namespace NHibernate.PersistenceTesting
         public static PersistenceSpecification<T> CheckComponentList<T, TListElement>(this PersistenceSpecification<T> spec,
                                                                                       Expression<Func<T, object>> expression,
                                                                                       IEnumerable<TListElement> propertyValue)
+            where T : class
         {
             return spec.CheckComponentList(expression, propertyValue, null);
         }
@@ -455,6 +494,7 @@ namespace NHibernate.PersistenceTesting
                                                                                       Expression<Func<T, object>> expression,
                                                                                       IEnumerable<TListElement> propertyValue,
                                                                                       IEqualityComparer elementComparer)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -465,6 +505,7 @@ namespace NHibernate.PersistenceTesting
                                                                                        Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                                        IEnumerable<TListElement> propertyValue,
                                                                                        Action<T, TListElement> listItemSetter)
+            where T : class
         {
             return spec.CheckComponentList(expression, propertyValue, null, listItemSetter);
         }
@@ -474,6 +515,7 @@ namespace NHibernate.PersistenceTesting
                                                                                        IEnumerable<TListElement> propertyValue,
                                                                                        IEqualityComparer elementComparer,
                                                                                        Action<T, TListElement> listItemSetter)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -491,6 +533,7 @@ namespace NHibernate.PersistenceTesting
                                                                                      Expression<Func<T, IEnumerable<TListElement>>> expression,
                                                                                      IEnumerable<TListElement> propertyValue,
                                                                                      Action<T, IEnumerable<TListElement>> listSetter)
+            where T : class
         {
             return spec.CheckComponentList(expression, propertyValue, null, listSetter);
         }
@@ -500,6 +543,7 @@ namespace NHibernate.PersistenceTesting
                                                                                       IEnumerable<TListElement> propertyValue,
                                                                                       IEqualityComparer elementComparer,
                                                                                       Action<T, IEnumerable<TListElement>> listSetter)
+            where T : class
         {
             Accessor property = ReflectionHelper.GetAccessor(expression);
 
@@ -514,6 +558,7 @@ namespace NHibernate.PersistenceTesting
                                                                             Expression<Func<T, IEnumerable<TItem>>> expression,
                                                                             Action<T, TItem> addAction,
                                                                             IEnumerable<TItem> itemsToAdd)
+            where T : class
         {
             return spec.CheckList(expression, itemsToAdd, addAction);
         }
@@ -539,6 +584,7 @@ namespace NHibernate.PersistenceTesting
         }
 
         private static class ListConstructor<T, TProperty>
+            where T : class
         {
             // ReSharper disable once StaticMemberInGenericType
             private static ConstructorInfo listConstructor;
