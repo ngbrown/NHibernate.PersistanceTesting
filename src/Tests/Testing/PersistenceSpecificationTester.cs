@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using FakeItEasy;
+﻿using FakeItEasy;
 using NHibernate;
 using NHibernate.PersistenceTesting;
 using NUnit.Framework;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+#if NETFRAMEWORK || WINDOWS
+using System.Drawing;
+#endif
 
 namespace Tests.Testing
 {
@@ -18,8 +20,10 @@ namespace Tests.Testing
             public string Name { get; set; }
             public Kitten FirstKitten { get; set; }
             public IList<Kitten> AllKittens { get; set; }
-            public Bitmap Picture { get; set; }
 
+#if NETFRAMEWORK || WINDOWS
+            public Bitmap Picture { get; set; }
+#endif
             public Cat()
             {
                 AllKittens = new List<Kitten>();
@@ -61,6 +65,7 @@ namespace Tests.Testing
             }
         }
 
+#if NETFRAMEWORK || WINDOWS
         public class DummyBitmapComparer : IEqualityComparer
         {
             bool IEqualityComparer.Equals(object x, object y)
@@ -73,6 +78,7 @@ namespace Tests.Testing
                 return obj.GetHashCode();
             }
         }
+#endif
 
         private PersistenceSpecification<Cat> spec;
         private ISession session;
@@ -90,7 +96,9 @@ namespace Tests.Testing
                 Id = 100,
                 Name = "Cat",
                 FirstKitten = firstKitten,
+#if NETFRAMEWORK || WINDOWS
                 Picture = new Bitmap(5, 5),
+#endif
                 AllKittens = new List<Kitten>
                 {
                     firstKitten,
@@ -104,7 +112,9 @@ namespace Tests.Testing
                 Id = 100,
                 Name = "IdenticalCat",
                 FirstKitten = firstKitten,
+#if NETFRAMEWORK || WINDOWS
                 Picture = new Bitmap(5, 5),
+#endif
                 AllKittens = new List<Kitten>
                 {
                     firstKitten,
@@ -170,7 +180,11 @@ namespace Tests.Testing
         [Test]
         public void Comparing_two_properties_should_use_the_specified_property_IEqualityComparer()
         {
+#if NETFRAMEWORK || WINDOWS
             spec.CheckProperty(x => x.Picture, cat.Picture, new DummyBitmapComparer()).VerifyTheMappings();
+#else
+            Assert.Ignore();
+#endif
         }
 
         [Test]
