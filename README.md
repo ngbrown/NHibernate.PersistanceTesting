@@ -113,9 +113,7 @@ public class CustomEqualityComparer: IEqualityComparer
 }
 ```
 
-Note that, in order for `CheckReferences` to work, you either need to pass an already persistence entity, or have cascading on the entities you're testing. Otherwise, the test will fail complaining "object references an unsaved transient instance". 
-
-Obviously, the sample provided here won't work because the `Store` object is transient so here you'll need `Cascading` to make the test pass (which is omitted for brevity).
+`CheckReference` automatically saves the referenced entity before saving the entity being tested. The transient `Store` in this example therefore does not require cascading on the `Employee.Store` mapping. The `Store` entity must have its own mapping, and its required properties and references must be valid for saving.
 
 
 # Testing lists
@@ -127,6 +125,6 @@ Obviously, the sample provided here won't work because the `Store` object is tra
 
 For list of contributors, see [Fluent NHibernate](https://github.com/jagregory/fluent-nhibernate).
 
-NHibernate.PersistenceTesting is &copy; 2017 [Nathan Brown](https://github.com/ngbrown) and contributors and &copy; 2008-2015 [James Gregory](http://jagregory.com) and contributors under the [BSD license](https://github.com/ngbrown/NHibernate.PersistanceTesting/blob/master/LICENSE.txt)
+NHibernate.PersistenceTesting is &copy; 2017-2026 [Nathan Brown](https://github.com/ngbrown) and contributors and &copy; 2008-2015 [James Gregory](http://jagregory.com) and contributors under the [BSD license](https://github.com/ngbrown/NHibernate.PersistanceTesting/blob/master/LICENSE.txt)
 
-Fluent NHibernate is &copy; 2008-2015 [James Gregory](http://jagregory.com) and contributors under the [BSD license](https://github.com/jagregory/fluent-nhibernate/blob/master/fluent-nhibernate/blob/master/LICENSE.txt)
+Fluent NHibernate is &copy; 2008-2015 [James Gregory](http://jagregory.com) and contributors under the [BSD license](https://github.com/nhibernate/fluent-nhibernate/blob/f54801921c61751a7a391de78280e0da00f8c3f2/LICENSE.txt)
