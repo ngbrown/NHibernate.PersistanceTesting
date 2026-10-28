@@ -4,6 +4,7 @@ namespace NHibernate.PersistenceTesting.Values
 {
     public class ReferenceProperty<T, TProperty> : Property<T, TProperty>
         where T : class
+        where TProperty: class
     {
         public ReferenceProperty(Accessor property, TProperty propertyValue) : base(property, propertyValue)
         {}
