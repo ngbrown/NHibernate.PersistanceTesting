@@ -31,7 +31,8 @@ namespace NHibernate.PersistenceTesting
         public PersistenceSpecification(ISession session, IEqualityComparer entityEqualityComparer)
         {
             currentSession = session;
-            hasExistingTransaction = currentSession.Transaction != null && currentSession.Transaction.IsActive;
+            var transaction = currentSession.Transaction;
+            hasExistingTransaction = transaction != null && transaction.IsActive;
             this.entityEqualityComparer = entityEqualityComparer;
         }
 
@@ -42,6 +43,8 @@ namespace NHibernate.PersistenceTesting
 
         public T VerifyTheMappings(T first)
         {
+            if (first == null) throw new ArgumentNullException(nameof(first));
+
             // Set the "suggested" properties, including references
             // to other entities and possibly collections
             allProperties.ForEach(p => p.SetValue(first));
@@ -57,6 +60,15 @@ namespace NHibernate.PersistenceTesting
 
             // "Find" the same entity from the second IRepository
             var second = currentSession.Get<T>(firstId);
+
+            if (second == null)
+            {
+                throw new ApplicationException(String.Format(
+                    "For entity of type '{0}' with identifier '{1}' expected '{2}' after saving and reloading, but got '(null)'.",
+                    typeof(T).FullName ?? typeof(T).Name,
+                    firstId,
+                    first.ToString() ?? "(null)"));
+            }
 
             // Validate that each specified property and value
             // made the round trip

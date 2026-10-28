@@ -94,7 +94,7 @@ namespace Tests
 
         public static void ShouldContain<T>(this IEnumerable<T> actual, T expected)
         {
-            ShouldContain(actual, x => x.Equals(expected));
+            ShouldContain(actual, x => object.Equals(x, expected));
         }
 
         public static void ShouldContain<T>(this IEnumerable<T> actual, Func<T, bool> expected)
@@ -110,7 +110,7 @@ namespace Tests
 
         public static IDictionary<KEY, VALUE> ShouldContain<KEY, VALUE>(this IDictionary<KEY, VALUE> actual, KEY key, VALUE value)
         {
-            actual.Keys.Contains(key).ShouldBeTrue();
+            actual.ContainsKey(key).ShouldBeTrue();
             actual[key].ShouldEqual(value);
             return actual;
         }

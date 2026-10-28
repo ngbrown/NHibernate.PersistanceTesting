@@ -13,6 +13,7 @@ namespace NHibernate.PersistenceTesting.Values
 
         public override void HasRegistered(PersistenceSpecification<T> specification)
         {
+            if (Expected == null) return;
             foreach (TListElement item in Expected)
             {
                 specification.TransactionalSave(item);
