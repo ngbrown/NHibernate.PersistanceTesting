@@ -8,6 +8,7 @@ namespace NHibernate.PersistenceTesting.Values
 {
     public class ReferenceBag<T, TListElement> : ReferenceList<T, TListElement>
         where T : class
+        where TListElement : class
     {
         public ReferenceBag(Accessor property, IEnumerable<TListElement> value) : base(property, value)
         {}
