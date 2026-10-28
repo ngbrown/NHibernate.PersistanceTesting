@@ -35,9 +35,9 @@ namespace Tests.Testing
     public abstract class With_persistence_specification<T> : Specification
         where T : class
     {
-        private ISession session;
-        protected InspectablePersistenceSpecification<T> sut;
-        protected IEqualityComparer comparer;
+        private ISession session = null!;
+        protected InspectablePersistenceSpecification<T> sut = null!;
+        protected IEqualityComparer comparer = null!;
 
         public override void establish_context()
         {
@@ -135,12 +135,12 @@ namespace Tests.Testing
     [TestFixture]
     public class When_a_checked_property_with_a_custom_setter_is_added : With_persistence_specification<PropertyEntity>
     {
-        protected Action<PropertyEntity, string> propertySetter;
+        protected Action<PropertyEntity, string?> propertySetter = null!;
 
         public override void establish_context()
         {
             base.establish_context();
-            propertySetter = A.Fake<Action<PropertyEntity, string>>();
+            propertySetter = A.Fake<Action<PropertyEntity, string?>>();
         }
 
         public override void because()
@@ -151,7 +151,7 @@ namespace Tests.Testing
         [Test]
         public void should_add_a_property_check()
         {
-            sut.AllProperties.First().ShouldBeOfType(typeof(Property<PropertyEntity, string>));
+            sut.AllProperties.First().ShouldBeOfType(typeof(Property<PropertyEntity, string?>));
         }
 
         [Test]
@@ -170,7 +170,7 @@ namespace Tests.Testing
     [TestFixture]
     public class When_the_value_setter_of_a_checked_property_is_invoked : When_a_checked_property_with_a_custom_setter_is_added
     {
-        private PropertyEntity entity;
+        private PropertyEntity entity = null!;
 
         public override void establish_context()
         {
@@ -181,7 +181,7 @@ namespace Tests.Testing
         public override void because()
         {
             base.because();
-            ((Property<PropertyEntity, string>)sut.AllProperties.First()).ValueSetter.Invoke(entity, null, "expected");
+            ((Property<PropertyEntity, string>)sut.AllProperties.First()).ValueSetter.Invoke(entity, A.Fake<NHibernate.PersistenceTesting.Utils.Accessor>(), "expected");
         }
 
         [Test]
@@ -250,12 +250,12 @@ namespace Tests.Testing
     [TestFixture]
     public class When_a_checked_reference_with_a_custom_setter_is_added : With_persistence_specification<ReferenceEntity>
     {
-        protected Action<ReferenceEntity, OtherEntity> propertySetter;
+        protected Action<ReferenceEntity, OtherEntity?> propertySetter = null!;
 
         public override void establish_context()
         {
             base.establish_context();
-            propertySetter = A.Fake<Action<ReferenceEntity, OtherEntity>>();
+            propertySetter = A.Fake<Action<ReferenceEntity, OtherEntity?>>();
         }
 
         public override void because()
@@ -285,8 +285,8 @@ namespace Tests.Testing
     [TestFixture]
     public class When_the_value_setter_of_a_checked_reference_is_invoked : When_a_checked_reference_with_a_custom_setter_is_added
     {
-        private ReferenceEntity entity;
-        private OtherEntity referenced;
+        private ReferenceEntity entity = null!;
+        private OtherEntity referenced = null!;
 
         public override void establish_context()
         {
@@ -298,7 +298,7 @@ namespace Tests.Testing
         public override void because()
         {
             base.because();
-            ((Property<ReferenceEntity, OtherEntity>)sut.AllProperties.First()).ValueSetter.Invoke(entity, null, referenced);
+            ((Property<ReferenceEntity, OtherEntity>)sut.AllProperties.First()).ValueSetter.Invoke(entity, A.Fake<NHibernate.PersistenceTesting.Utils.Accessor>(), referenced);
         }
 
         [Test]
@@ -368,7 +368,7 @@ namespace Tests.Testing
     [TestFixture]
     public class When_a_checked_enumerable_with_a_custom_item_setter_is_added : With_persistence_specification<ReferenceEntity>
     {
-        protected Action<ReferenceEntity, OtherEntity> listSetter;
+        protected Action<ReferenceEntity, OtherEntity> listSetter = null!;
 
         public override void establish_context()
         {
@@ -405,7 +405,7 @@ namespace Tests.Testing
     [TestFixture]
     public class When_a_checked_list_with_a_custom_list_setter_is_added : With_persistence_specification<ReferenceEntity>
     {
-        protected Action<ReferenceEntity, IEnumerable<OtherEntity>> listSetter;
+        protected Action<ReferenceEntity, IEnumerable<OtherEntity>> listSetter = null!;
 
         public override void establish_context()
         {
@@ -440,8 +440,8 @@ namespace Tests.Testing
     [TestFixture]
     public class When_the_list_setter_of_a_checked_list_is_invoked : When_a_checked_list_with_a_custom_list_setter_is_added
     {
-        private ReferenceEntity entity;
-        private OtherEntity[] referenced;
+        private ReferenceEntity entity = null!;
+        private OtherEntity[] referenced = null!;
 
         public override void establish_context()
         {
@@ -453,7 +453,7 @@ namespace Tests.Testing
         public override void because()
         {
             base.because();
-            ((ReferenceList<ReferenceEntity, OtherEntity>)sut.AllProperties.First()).ValueSetter.Invoke(entity, null, referenced);
+            ((ReferenceList<ReferenceEntity, OtherEntity>)sut.AllProperties.First()).ValueSetter.Invoke(entity, A.Fake<NHibernate.PersistenceTesting.Utils.Accessor>(), referenced);
         }
 
         [Test]
@@ -466,7 +466,7 @@ namespace Tests.Testing
     [TestFixture]
     public class When_a_checked_list_with_a_custom_list_item_setter_is_added : With_persistence_specification<ReferenceEntity>
     {
-        protected Action<ReferenceEntity, OtherEntity> listItemSetter;
+        protected Action<ReferenceEntity, OtherEntity> listItemSetter = null!;
 
         public override void establish_context()
         {
@@ -501,8 +501,8 @@ namespace Tests.Testing
     [TestFixture]
     public class When_the_list_item_setter_of_a_checked_list_is_invoked : When_a_checked_list_with_a_custom_list_item_setter_is_added
     {
-        private ReferenceEntity entity;
-        private OtherEntity[] referenced;
+        private ReferenceEntity entity = null!;
+        private OtherEntity[] referenced = null!;
 
         public override void establish_context()
         {
@@ -514,7 +514,7 @@ namespace Tests.Testing
         public override void because()
         {
             base.because();
-            ((ReferenceList<ReferenceEntity, OtherEntity>)sut.AllProperties.First()).ValueSetter.Invoke(entity, null, referenced);
+            ((ReferenceList<ReferenceEntity, OtherEntity>)sut.AllProperties.First()).ValueSetter.Invoke(entity, A.Fake<NHibernate.PersistenceTesting.Utils.Accessor>(), referenced);
         }
 
         [Test]
@@ -555,7 +555,7 @@ namespace Tests.Testing
     [TestFixture]
     public class When_a_checked_component_list_with_a_custom_list_setter_is_added : With_persistence_specification<ReferenceEntity>
     {
-        protected Action<ReferenceEntity, IEnumerable<OtherEntity>> listSetter;
+        protected Action<ReferenceEntity, IEnumerable<OtherEntity>> listSetter = null!;
 
         public override void establish_context()
         {
@@ -590,8 +590,8 @@ namespace Tests.Testing
     [TestFixture]
     public class When_the_list_setter_of_a_checked_component_list_is_invoked : When_a_checked_component_list_with_a_custom_list_setter_is_added
     {
-        private ReferenceEntity entity;
-        private OtherEntity[] referenced;
+        private ReferenceEntity entity = null!;
+        private OtherEntity[] referenced = null!;
 
         public override void establish_context()
         {
@@ -603,7 +603,7 @@ namespace Tests.Testing
         public override void because()
         {
             base.because();
-            ((List<ReferenceEntity, OtherEntity>)sut.AllProperties.First()).ValueSetter.Invoke(entity, null, referenced);
+            ((List<ReferenceEntity, OtherEntity>)sut.AllProperties.First()).ValueSetter.Invoke(entity, A.Fake<NHibernate.PersistenceTesting.Utils.Accessor>(), referenced);
         }
 
         [Test]
@@ -616,7 +616,7 @@ namespace Tests.Testing
     [TestFixture]
     public class When_a_checked_component_list_with_a_custom_list_item_setter_is_added : With_persistence_specification<ReferenceEntity>
     {
-        protected Action<ReferenceEntity, OtherEntity> listItemSetter;
+        protected Action<ReferenceEntity, OtherEntity> listItemSetter = null!;
 
         public override void establish_context()
         {
@@ -651,8 +651,8 @@ namespace Tests.Testing
     [TestFixture]
     public class When_the_list_item_setter_of_a_checked_component_list_is_invoked : When_a_checked_component_list_with_a_custom_list_item_setter_is_added
     {
-        private ReferenceEntity entity;
-        private OtherEntity[] referenced;
+        private ReferenceEntity entity = null!;
+        private OtherEntity[] referenced = null!;
 
         public override void establish_context()
         {
@@ -664,7 +664,7 @@ namespace Tests.Testing
         public override void because()
         {
             base.because();
-            ((List<ReferenceEntity, OtherEntity>)sut.AllProperties.First()).ValueSetter.Invoke(entity, null, referenced);
+            ((List<ReferenceEntity, OtherEntity>)sut.AllProperties.First()).ValueSetter.Invoke(entity, A.Fake<NHibernate.PersistenceTesting.Utils.Accessor>(), referenced);
         }
 
         [Test]

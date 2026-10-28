@@ -11,13 +11,13 @@ namespace Tests.Testing.Values
     {
         public abstract class With_initialized_bag : Specification
         {
-            protected Accessor property;
-            protected ListEntity target;
-            protected ReferenceBag<ListEntity, string> sut;
+            protected Accessor property = null!;
+            protected ListEntity target = null!;
+            protected ReferenceBag<ListEntity, string> sut = null!;
 
             public override void establish_context()
             {
-                property = ReflectionHelper.GetAccessor((Expression<Func<ListEntity, IEnumerable<string>>>)(x => x.GetterAndSetter));
+                property = ReflectionHelper.GetAccessor((Expression<Func<ListEntity, IEnumerable<string>?>>)(x => x.GetterAndSetter));
                 target = new ListEntity();
 
                 sut = new ReferenceBag<ListEntity, string>(property, new[] { "foo", "bar", "baz" });
@@ -30,7 +30,7 @@ namespace Tests.Testing.Values
             public override void establish_context()
             {
                 var baz = "baz";
-                property = ReflectionHelper.GetAccessor((Expression<Func<ListEntity, IEnumerable<string>>>)(x => x.GetterAndSetter));
+                property = ReflectionHelper.GetAccessor((Expression<Func<ListEntity, IEnumerable<string>?>>)(x => x.GetterAndSetter));
                 target = new ListEntity();
                 sut = new ReferenceBag<ListEntity, string>(property, new[] { "foo", baz, baz, "bar" });
 

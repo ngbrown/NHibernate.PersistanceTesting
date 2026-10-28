@@ -8,7 +8,7 @@ namespace Tests
 {
     public class Specification
     {
-        public Exception thrown_exception { get; private set; }
+        public Exception? thrown_exception { get; private set; }
 
         [OneTimeSetUp]
         public void Setup()

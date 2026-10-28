@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml;
 using NUnit.Framework;
@@ -26,53 +27,58 @@ namespace Tests
             Assert.IsTrue(condition);
         }
 
-        public static object ShouldEqual(this object actual, object expected)
+        [return: NotNullIfNotNull("expected")]
+        public static object? ShouldEqual(this object? actual, object? expected)
         {
             Assert.AreEqual(expected, actual);
             return expected;
         }
 
-        public static object ShouldNotEqual(this object actual, object expected)
+        [return: NotNullIfNotNull("expected")]
+        public static object? ShouldNotEqual(this object? actual, object? expected)
         {
             Assert.AreNotEqual(expected, actual);
             return expected;
         }
 
-        public static void ShouldBeNull(this object anObject)
+        public static void ShouldBeNull(this object? anObject)
         {
             Assert.IsNull(anObject);
         }
 
-        public static T ShouldNotBeNull<T>(this T anObject)
+        [return: NotNull]
+        public static T ShouldNotBeNull<T>(this T? anObject)
         {
             Assert.IsNotNull(anObject);
 
-            return anObject;
+            return anObject!;
         }
 
-        public static object ShouldBeTheSameAs(this object actual, object expected)
+        [return: NotNullIfNotNull("expected")]
+        public static object? ShouldBeTheSameAs(this object? actual, object? expected)
         {
             Assert.AreSame(expected, actual);
             return expected;
         }
 
-        public static object ShouldNotBeTheSameAs(this object actual, object expected)
+        [return: NotNullIfNotNull("expected")]
+        public static object? ShouldNotBeTheSameAs(this object? actual, object? expected)
         {
             Assert.AreNotSame(expected, actual);
             return expected;
         }
 
-        public static void ShouldBeOfType(this object actual, Type expected)
+        public static void ShouldBeOfType(this object? actual, Type expected)
         {
             Assert.IsInstanceOf(expected, actual);
         }
 
-        public static void ShouldBeOfType<T>(this object actual)
+        public static void ShouldBeOfType<T>(this object? actual)
         {
             Assert.IsInstanceOf<T>(actual);
         }
 
-        public static void ShouldNotBeOfType(this object actual, Type expected)
+        public static void ShouldNotBeOfType(this object? actual, Type expected)
         {
             Assert.IsNotInstanceOf(expected, actual);
         }
@@ -87,12 +93,12 @@ namespace Tests
             (actual is T).ShouldBeTrue();
         }
 
-        public static void ShouldContain(this IList actual, object expected)
+        public static void ShouldContain(this IList actual, object? expected)
         {
             Assert.Contains(expected, actual);
         }
 
-        public static void ShouldContain<T>(this IEnumerable<T> actual, T expected)
+        public static void ShouldContain<T>(this IEnumerable<T> actual, T? expected)
         {
             ShouldContain(actual, x => object.Equals(x, expected));
         }
@@ -219,7 +225,8 @@ namespace Tests
             StringAssert.Contains(expected, actual);
         }
 
-        public static string ShouldBeEqualIgnoringCase(this string actual, string expected)
+        [return: NotNullIfNotNull("expected")]
+        public static string? ShouldBeEqualIgnoringCase(this string? actual, string? expected)
         {
             StringAssert.AreEqualIgnoringCase(expected, actual);
             return expected;
@@ -247,7 +254,7 @@ namespace Tests
 
         public static Exception ShouldBeThrownBy(this Type exceptionType, MethodThatThrows method)
         {
-            Exception exception = null;
+            Exception? exception = null;
 
             try
             {
@@ -264,7 +271,7 @@ namespace Tests
                 Assert.Fail(String.Format("Expected {0} to be thrown.", exceptionType.FullName));
             }
 
-            return exception;
+            return exception!;
         }
 
         public static void ShouldEqualSqlDate(this DateTime actual, DateTime expected)
@@ -288,13 +295,13 @@ namespace Tests
 
         public static XmlElement ShouldHaveChild(this XmlElement element, string xpath)
         {
-            XmlElement child = element.SelectSingleNode(xpath) as XmlElement;
+            XmlElement? child = element.SelectSingleNode(xpath) as XmlElement;
             Assert.IsNotNull(child, "Should have a child element matching " + xpath);
 
-            return child;
+            return child!;
         }
 
-        public static XmlElement DoesNotHaveAttribute(this XmlElement element, string attributeName)
+        public static XmlElement DoesNotHaveAttribute(this XmlElement? element, string attributeName)
         {
             Assert.IsNotNull(element, "The Element is null");
             Assert.IsFalse(element.HasAttribute(attributeName), "Element should not have an attribute named " + attributeName);
@@ -302,7 +309,7 @@ namespace Tests
             return element;
         }
 
-        public static T As<T>(this object instance) where T : class
+        public static T? As<T>(this object instance) where T : class
         {
             return instance as T;
         }

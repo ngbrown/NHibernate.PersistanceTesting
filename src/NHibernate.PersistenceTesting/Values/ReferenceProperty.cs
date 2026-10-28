@@ -6,12 +6,12 @@ namespace NHibernate.PersistenceTesting.Values
         where T : class
         where TProperty: class
     {
-        public ReferenceProperty(Accessor property, TProperty propertyValue) : base(property, propertyValue)
+        public ReferenceProperty(Accessor property, TProperty? propertyValue) : base(property, propertyValue)
         {}
 
         public override void HasRegistered(PersistenceSpecification<T> specification)
         {
-            TProperty value = Value;
+            TProperty? value = Value;
             if (value != null)
             {
                 specification.TransactionalSave(value);

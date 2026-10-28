@@ -17,8 +17,8 @@ namespace Tests.Testing
         public class Cat
         {
             public long Id { get; set; }
-            public string Name { get; set; }
-            public Kitten FirstKitten { get; set; }
+            public string? Name { get; set; }
+            public Kitten? FirstKitten { get; set; }
             public IList<Kitten> AllKittens { get; set; }
 
 #if NETFRAMEWORK || WINDOWS
@@ -39,12 +39,12 @@ namespace Tests.Testing
         public class Kitten
         {
             public long Id { get; set; }
-            public string Name { get; set; }
+            public string? Name { get; set; }
         }
 
         public class TestComparer : IEqualityComparer
         {
-            bool IEqualityComparer.Equals(object x, object y)
+            bool IEqualityComparer.Equals(object? x, object? y)
             {
                 if (x is Cat && y is Cat)
                     return ((Cat)x).Id == ((Cat)y).Id;
@@ -68,7 +68,7 @@ namespace Tests.Testing
 #if NETFRAMEWORK || WINDOWS
         public class DummyBitmapComparer : IEqualityComparer
         {
-            bool IEqualityComparer.Equals(object x, object y)
+            bool IEqualityComparer.Equals(object? x, object? y)
             {
                 return x is Bitmap && y is Bitmap;
             }
@@ -80,12 +80,12 @@ namespace Tests.Testing
         }
 #endif
 
-        private PersistenceSpecification<Cat> spec;
-        private ISession session;
-        private ITransaction transaction;
-        private Cat cat;
-        private Cat identicalCat;
-        private ISessionFactory sessionSource;
+        private PersistenceSpecification<Cat> spec = null!;
+        private ISession session = null!;
+        private ITransaction transaction = null!;
+        private Cat cat = null!;
+        private Cat identicalCat = null!;
+        private ISessionFactory sessionSource = null!;
 
         [SetUp]
         public void Setup()
@@ -126,7 +126,7 @@ namespace Tests.Testing
 
             session = A.Fake<ISession>();
             A.CallTo(() => session.BeginTransaction()).Returns(transaction);
-            A.CallTo(() => session.Get<Cat>(null)).WithAnyArguments().Returns(identicalCat);
+            A.CallTo(() => session.Get<Cat?>(null)).WithAnyArguments().Returns(identicalCat);
             A.CallTo(() => session.GetIdentifier(cat)).Returns(cat.Id);
 
             sessionSource = A.Fake<ISessionFactory>();

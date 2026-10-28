@@ -14,7 +14,7 @@ namespace Tests.DomainModel
         /// true if the current object is equal to the <paramref name="obj" /> parameter; otherwise, false.
         /// </returns>
         /// <param name="obj">An Entity to compare with this object.</param>
-        public virtual bool Equals(Entity obj)
+        public virtual bool Equals(Entity? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -30,7 +30,7 @@ namespace Tests.DomainModel
         /// </returns>
         /// <param name="obj">The <see cref="T:System.Object" /> to compare with the current <see cref="T:System.Object" />. </param>
         /// <exception cref="T:System.NullReferenceException">The <paramref name="obj" /> parameter is null.</exception><filterpriority>2</filterpriority>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;

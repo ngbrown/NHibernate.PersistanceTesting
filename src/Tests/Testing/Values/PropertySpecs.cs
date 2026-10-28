@@ -10,9 +10,9 @@ namespace Tests.Testing.Values
 {
     public abstract class With_property_entity : Specification
     {
-        private Accessor property;
-        protected PropertyEntity target;
-        protected Property<PropertyEntity, string> sut;
+        private Accessor property = null!;
+        protected PropertyEntity target = null!;
+        protected Property<PropertyEntity, string> sut = null!;
 
         public override void establish_context()
         {
@@ -22,7 +22,7 @@ namespace Tests.Testing.Values
             sut = new Property<PropertyEntity, string>(property, "expected");
         }
 
-        protected abstract Expression<Func<PropertyEntity, string>> GetPropertyExpression();
+        protected abstract Expression<Func<PropertyEntity, string?>> GetPropertyExpression();
     }
 
     public abstract class When_a_property_is_set_successfully : With_property_entity
@@ -45,7 +45,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_a_property_with_a_public_setter_is_set : When_a_property_is_set_successfully
     {
-        protected override Expression<Func<PropertyEntity, string>> GetPropertyExpression()
+        protected override Expression<Func<PropertyEntity, string?>> GetPropertyExpression()
         {
             return x => x.GetterAndSetter;
         }
@@ -60,7 +60,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_a_property_with_a_private_setter_is_set : When_a_property_is_set_successfully
     {
-        protected override Expression<Func<PropertyEntity, string>> GetPropertyExpression()
+        protected override Expression<Func<PropertyEntity, string?>> GetPropertyExpression()
         {
             return x => x.GetterAndPrivateSetter;
         }
@@ -75,7 +75,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_a_property_with_a_backing_field_is_set : With_property_entity
     {
-        protected override Expression<Func<PropertyEntity, string>> GetPropertyExpression()
+        protected override Expression<Func<PropertyEntity, string?>> GetPropertyExpression()
         {
             return x => x.BackingField;
         }
@@ -102,7 +102,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_a_property_is_set_with_a_custom_setter : When_a_property_is_set_successfully
     {
-        protected override Expression<Func<PropertyEntity, string>> GetPropertyExpression()
+        protected override Expression<Func<PropertyEntity, string?>> GetPropertyExpression()
         {
             return x => x.BackingField;
         }
@@ -124,7 +124,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_a_property_is_set_with_a_custom_setter_that_fails : With_property_entity
     {
-        protected override Expression<Func<PropertyEntity, string>> GetPropertyExpression()
+        protected override Expression<Func<PropertyEntity, string?>> GetPropertyExpression()
         {
             return x => x.BackingField;
         }
@@ -157,13 +157,13 @@ namespace Tests.Testing.Values
 
     public abstract class With_initialized_property : Specification
     {
-        private Accessor property;
-        protected PropertyEntity target;
-        protected Property<PropertyEntity, string> sut;
+        private Accessor property = null!;
+        protected PropertyEntity target = null!;
+        protected Property<PropertyEntity, string> sut = null!;
 
         public override void establish_context()
         {
-            property = ReflectionHelper.GetAccessor((Expression<Func<PropertyEntity, string>>)(x => x.GetterAndSetter));
+            property = ReflectionHelper.GetAccessor((Expression<Func<PropertyEntity, string?>>)(x => x.GetterAndSetter));
             target = new PropertyEntity();
 
             sut = new Property<PropertyEntity, string>(property, "expected");
@@ -262,7 +262,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_a_property_is_checked_with_a_custom_equality_comparer_that_fails : With_initialized_property
     {
-        private InvalidOperationException exception;
+        private InvalidOperationException exception = null!;
 
         public override void establish_context()
         {

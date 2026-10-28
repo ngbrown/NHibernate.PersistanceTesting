@@ -15,7 +15,7 @@ namespace Tests.DomainModel
     [TestFixture]
     public class ConnectedTester
     {
-        private ISessionSource source;
+        private ISessionSource source = null!;
 
         [SetUp]
         public void SetUp()
@@ -166,17 +166,17 @@ namespace Tests.DomainModel
 
     public class SuperRecord : Entity
     {
-        public virtual string Name { get; set; }
+        public virtual string? Name { get; set; }
     }
 
     public class ChildRecord : SuperRecord
     {
-        public virtual string Another { get; set; }
+        public virtual string? Another { get; set; }
     }
 
     public class Child2Record : ChildRecord
     {
-        public virtual string Third { get; set; }
+        public virtual string? Third { get; set; }
     }
 
     public class RecordMap : ClassMapping<Record>
@@ -192,9 +192,9 @@ namespace Tests.DomainModel
 
     public class Record : Entity
     {
-        public virtual string Name { get; set; }
+        public virtual string? Name { get; set; }
         public virtual int Age { get; set; }
-        public virtual string Location { get; set; }
+        public virtual string? Location { get; set; }
     }
 
     public class BinaryRecordMap : ClassMapping<BinaryRecord>
@@ -208,7 +208,7 @@ namespace Tests.DomainModel
 
     public class BinaryRecord : Entity
     {
-        public virtual byte[] BinaryValue { get; set; }
+        public virtual byte[]? BinaryValue { get; set; }
     }
 
     public class RecordWithNullablePropertyMap : ClassMapping<RecordWithNullableProperty>
@@ -224,9 +224,9 @@ namespace Tests.DomainModel
 
     public class RecordWithNullableProperty : Entity
     {
-        public virtual string Name { get; set; }
+        public virtual string? Name { get; set; }
         public virtual int? Age { get; set; }
-        public virtual string Location { get; set; }
+        public virtual string? Location { get; set; }
     }
 
     public class DateTimeRecordMap : ClassMapping<DateTimeRecord>

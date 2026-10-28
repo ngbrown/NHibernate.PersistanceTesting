@@ -31,12 +31,12 @@ namespace NHibernate.PersistenceTesting.Utils
             get { return member.Name; }
         }
 
-        public void SetValue(object target, object propertyValue)
+        public void SetValue(object target, object? propertyValue)
         {
             member.SetValue(target, propertyValue);
         }
 
-        public object GetValue(object target)
+        public object? GetValue(object target)
         {
             return member.GetValue(target);
         }

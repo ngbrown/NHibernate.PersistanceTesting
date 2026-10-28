@@ -13,10 +13,10 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_a_reference_list_is_registered_on_the_persistence_specification : Specification
     {
-        private ReferenceList<PropertyEntity, OtherEntity> sut;
-        private PersistenceSpecification<PropertyEntity> specification;
-        private ISession session;
-        private List<OtherEntity> referencedEntities;
+        private ReferenceList<PropertyEntity, OtherEntity> sut = null!;
+        private PersistenceSpecification<PropertyEntity> specification = null!;
+        private ISession session = null!;
+        private List<OtherEntity> referencedEntities = null!;
 
         public override void establish_context()
         {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using NHibernate.PersistenceTesting.Utils;
 
 namespace NHibernate.PersistenceTesting.Values
@@ -7,7 +8,7 @@ namespace NHibernate.PersistenceTesting.Values
     public abstract class Property<T>
         where T : class
     {
-        public IEqualityComparer EntityEqualityComparer { get; set; }
+        public IEqualityComparer? EntityEqualityComparer { get; set; }
         public abstract void SetValue(T target);
         public abstract void CheckValue(object target);
 
@@ -18,18 +19,18 @@ namespace NHibernate.PersistenceTesting.Values
     public class Property<T, TProperty> : Property<T>
         where T : class
     {
-        private static readonly Action<T, Accessor, TProperty> DefaultValueSetter = (target, propertyAccessor, value) => propertyAccessor.SetValue (target, value);
+        private static readonly Action<T, Accessor, TProperty?> DefaultValueSetter = (target, propertyAccessor, value) => propertyAccessor.SetValue (target, value);
         private readonly Accessor _propertyAccessor;
-        private readonly TProperty _value;
-        private Action<T, Accessor, TProperty> _valueSetter;
+        private readonly TProperty? _value;
+        private Action<T, Accessor, TProperty?>? _valueSetter;
 
-        public Property(Accessor property, TProperty value)
+        public Property(Accessor property, TProperty? value)
         {
             _propertyAccessor = property;
             _value = value;
         }
 
-        public virtual Action<T, Accessor, TProperty> ValueSetter
+        [AllowNull] public virtual Action<T, Accessor, TProperty?> ValueSetter
         {
             get
             {
@@ -48,7 +49,7 @@ namespace NHibernate.PersistenceTesting.Values
             get { return _propertyAccessor; }
         }
 
-        protected TProperty Value
+        protected TProperty? Value
         {
             get { return _value; }
         }
@@ -68,7 +69,7 @@ namespace NHibernate.PersistenceTesting.Values
 
         public override void CheckValue(object target)
         {
-            object actual = PropertyAccessor.GetValue(target);
+            object? actual = PropertyAccessor.GetValue(target);
 
             bool areEqual;
             
@@ -85,7 +86,7 @@ namespace NHibernate.PersistenceTesting.Values
             }
         }
 
-        private string GetInequalityComparisonMessage(object actual)
+        private string GetInequalityComparisonMessage(object? actual)
         {
             string message;
 

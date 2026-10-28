@@ -19,7 +19,7 @@ namespace NHibernate.PersistenceTesting.Values
             AssertGenericListMatches(actual, Expected);
         }
 
-        private void AssertGenericListMatches(IEnumerable actualEnumerable, IEnumerable<TListElement> expectedEnumerable)
+        private void AssertGenericListMatches(IEnumerable? actualEnumerable, IEnumerable<TListElement>? expectedEnumerable)
         {
             if (actualEnumerable == null)
             {
