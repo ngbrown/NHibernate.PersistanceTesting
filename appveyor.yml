@@ -1,5 +1,5 @@
 version: 1.4.0.{build}
-image: Visual Studio 2019
+image: Visual Studio 2026
 configuration: Release
 platform: Any CPU
 build_script:
@@ -19,7 +19,7 @@ build_script:
     }
 test_script:
 - ps: >-
-    dotnet test .\src\Tests\bin\Release\netcoreapp2.1\Tests.dll --logger:Appveyor
+    dotnet test .\src\Tests\Tests.csproj --no-build --configuration Release -p:Platform=AnyCPU --logger:Appveyor
 artifacts:
 - path: '*.nupkg'
 deploy:
