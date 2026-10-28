@@ -11,10 +11,10 @@ namespace Tests.Testing.Values
 {
     public abstract class With_list_entity : Specification
     {
-        private Accessor property;
-        protected ListEntity target;
-        protected List<ListEntity, string> sut;
-        protected string[] listItems;
+        private Accessor property = null!;
+        protected ListEntity target = null!;
+        protected List<ListEntity, string> sut = null!;
+        protected string[] listItems = null!;
 
         public override void establish_context()
         {
@@ -25,7 +25,7 @@ namespace Tests.Testing.Values
             sut = new List<ListEntity, string>(property, listItems);
         }
 
-        protected abstract Expression<Func<ListEntity, IEnumerable>> GetPropertyExpression();
+        protected abstract Expression<Func<ListEntity, IEnumerable?>> GetPropertyExpression();
     }
 
     public abstract class When_a_list_property_with_is_set_successfully : With_list_entity
@@ -48,7 +48,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_a_list_property_with_a_public_setter_is_set : When_a_list_property_with_is_set_successfully
     {
-        protected override Expression<Func<ListEntity, IEnumerable>> GetPropertyExpression()
+        protected override Expression<Func<ListEntity, IEnumerable?>> GetPropertyExpression()
         {
             return x => x.GetterAndSetter;
         }
@@ -66,7 +66,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_a_list_property_with_a_private_setter_is_set : When_a_list_property_with_is_set_successfully
     {
-        protected override Expression<Func<ListEntity, IEnumerable>> GetPropertyExpression()
+        protected override Expression<Func<ListEntity, IEnumerable?>> GetPropertyExpression()
         {
             return x => x.GetterAndPrivateSetter;
         }
@@ -84,7 +84,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_a_list_property_is_set_with_a_custom_setter : When_a_list_property_with_is_set_successfully
     {
-        protected override Expression<Func<ListEntity, IEnumerable>> GetPropertyExpression()
+        protected override Expression<Func<ListEntity, IEnumerable?>> GetPropertyExpression()
         {
             return x => x.BackingField;
         }
@@ -115,7 +115,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_a_typed_set_property_with_a_public_setter_is_set : When_a_list_property_with_is_set_successfully
     {
-        protected override Expression<Func<ListEntity, IEnumerable>> GetPropertyExpression()
+        protected override Expression<Func<ListEntity, IEnumerable?>> GetPropertyExpression()
         {
             return x => x.TypedSet;
         }
@@ -133,7 +133,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_a_collection_property_with_a_public_setter_is_set : When_a_list_property_with_is_set_successfully
     {
-        protected override Expression<Func<ListEntity, IEnumerable>> GetPropertyExpression()
+        protected override Expression<Func<ListEntity, IEnumerable?>> GetPropertyExpression()
         {
             return x => x.Collection;
         }
@@ -154,7 +154,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_an_array_property_with_a_public_setter_is_set : When_a_list_property_with_is_set_successfully
     {
-        protected override Expression<Func<ListEntity, IEnumerable>> GetPropertyExpression()
+        protected override Expression<Func<ListEntity, IEnumerable?>> GetPropertyExpression()
         {
             return x => x.Array;
         }
@@ -172,7 +172,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_an_list_property_with_a_public_setter_is_set : When_a_list_property_with_is_set_successfully
     {
-        protected override Expression<Func<ListEntity, IEnumerable>> GetPropertyExpression()
+        protected override Expression<Func<ListEntity, IEnumerable?>> GetPropertyExpression()
         {
             return x => x.List;
         }
@@ -190,7 +190,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_a_list_property_with_a_backing_field_is_set : With_list_entity
     {
-        protected override Expression<Func<ListEntity, IEnumerable>> GetPropertyExpression()
+        protected override Expression<Func<ListEntity, IEnumerable?>> GetPropertyExpression()
         {
             return x => x.BackingField;
         }
@@ -217,7 +217,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_a_list_property_is_set_with_a_custom_setter_that_fails : With_list_entity
     {
-        protected override Expression<Func<ListEntity, IEnumerable>> GetPropertyExpression()
+        protected override Expression<Func<ListEntity, IEnumerable?>> GetPropertyExpression()
         {
             return x => x.BackingField;
         }
@@ -250,13 +250,13 @@ namespace Tests.Testing.Values
 
     public abstract class With_initialized_list : Specification
     {
-        protected Accessor property;
-        protected ListEntity target;
-        protected List<ListEntity, string> sut;
+        protected Accessor property = null!;
+        protected ListEntity target = null!;
+        protected List<ListEntity, string> sut = null!;
 
         public override void establish_context()
         {
-            property = ReflectionHelper.GetAccessor((Expression<Func<ListEntity, IEnumerable<string>>>)(x => x.GetterAndSetter));
+            property = ReflectionHelper.GetAccessor((Expression<Func<ListEntity, IEnumerable<string>?>>)(x => x.GetterAndSetter));
             target = new ListEntity();
 
             sut = new List<ListEntity, string>(property, new[] { "foo", "bar", "baz" });
@@ -415,7 +415,7 @@ namespace Tests.Testing.Values
             Assert.That(exception!.Message, Is.EqualTo("Error while trying to set property Collection"));
             Assert.That(exception.InnerException, Is.TypeOf<ArgumentNullException>());
             Assert.That(((ArgumentNullException)exception.InnerException!).ParamName, Is.EqualTo("Expected"));
-            A.CallTo(() => property.SetValue(target, A<object>._)).MustNotHaveHappened();
+            A.CallTo(() => property.SetValue(target, A<object?>._)).MustNotHaveHappened();
         }
     }
 
@@ -449,7 +449,7 @@ namespace Tests.Testing.Values
             Assert.That(nullException.ParamName, Is.EqualTo("value"));
             A.CallTo(() => customSetter(target, property, A<IEnumerable<string>>._))
                 .WithAnyArguments().MustNotHaveHappened();
-            A.CallTo(() => property.SetValue(target, A<object>._)).MustNotHaveHappened();
+            A.CallTo(() => property.SetValue(target, A<object?>._)).MustNotHaveHappened();
         }
     }
 
@@ -506,7 +506,7 @@ namespace Tests.Testing.Values
     [TestFixture]
     public class When_a_list_is_checked_with_a_custom_equality_comparer_that_fails : With_initialized_list
     {
-        private InvalidOperationException exception;
+        private InvalidOperationException exception = null!;
 
         public override void establish_context()
         {
@@ -564,7 +564,7 @@ namespace Tests.Testing.Values
     {
         public override void establish_context()
         {
-            property = ReflectionHelper.GetAccessor((Expression<Func<ListEntity, IEnumerable>>)(x => x.List));
+            property = ReflectionHelper.GetAccessor((Expression<Func<ListEntity, IEnumerable?>>)(x => x.List));
             target = new ListEntity();
 
             sut = new List<ListEntity, string>(property, new[] { "foo", "bar", "baz" });
@@ -589,7 +589,7 @@ namespace Tests.Testing.Values
     {
         public override void establish_context()
         {
-            property = ReflectionHelper.GetAccessor((Expression<Func<ListEntity, IEnumerable<string>>>)(x => x.Array));
+            property = ReflectionHelper.GetAccessor((Expression<Func<ListEntity, IEnumerable<string>?>>)(x => x.Array));
             target = new ListEntity();
 
             sut = new List<ListEntity, string>(property, new[] { "foo", "bar", "baz" });

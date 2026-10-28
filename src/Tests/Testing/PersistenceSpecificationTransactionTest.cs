@@ -12,13 +12,13 @@ namespace Tests.Testing
         private class Cat
         {
             public long Id { get; set; }
-            public string Name { get; set; }
-            public CatType CatType { get; set; }
+            public string? Name { get; set; }
+            public CatType? CatType { get; set; }
         }
 
         private class CatType
         {
-            public string Name { get; set; }
+            public string? Name { get; set; }
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace Tests.Testing
 
         public class NameEqualityComparer : IEqualityComparer
         {
-            bool IEqualityComparer.Equals(object x, object y)
+            bool IEqualityComparer.Equals(object? x, object? y)
             {
                 if (x == null || y == null)
                     return false;

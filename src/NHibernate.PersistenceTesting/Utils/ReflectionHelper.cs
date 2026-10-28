@@ -29,12 +29,12 @@ namespace NHibernate.PersistenceTesting.Utils
 
         private static MemberExpression GetMemberExpression(Expression expression)
         {
-            return GetMemberExpression(expression, true);
+            return GetMemberExpression(expression, true)!;
         }
 
-        private static MemberExpression GetMemberExpression(Expression expression, bool enforceCheck)
+        private static MemberExpression? GetMemberExpression(Expression expression, bool enforceCheck)
         {
-            MemberExpression memberExpression = null;
+            MemberExpression? memberExpression = null;
             if (expression.NodeType == ExpressionType.Convert)
             {
                 var body = (UnaryExpression) expression;
@@ -56,11 +56,12 @@ namespace NHibernate.PersistenceTesting.Utils
         private static Accessor getAccessor(MemberExpression memberExpression)
         {
             var list = new List<Member>();
+            MemberExpression? current = memberExpression;
 
-            while (memberExpression != null)
+            while (current != null)
             {
-                list.Add(memberExpression.Member.ToMember());
-                memberExpression = memberExpression.Expression as MemberExpression;
+                list.Add(current.Member.ToMember());
+                current = current.Expression as MemberExpression;
             }
 
             if (list[list.Count - 1].IsField)

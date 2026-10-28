@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using NHibernate.PersistenceTesting.Utils;
 using NHibernate.PersistenceTesting.Values;
@@ -10,10 +11,10 @@ namespace NHibernate.PersistenceTesting
     {
         protected readonly List<Property<T>> allProperties = new List<Property<T>>();
         private readonly ISession currentSession;
-        private readonly IEqualityComparer entityEqualityComparer;
+        private readonly IEqualityComparer? entityEqualityComparer;
         private readonly bool hasExistingTransaction;
 
-        public PersistenceSpecification(ISessionFactory sessionFactory, IEqualityComparer entityEqualityComparer)
+        public PersistenceSpecification(ISessionFactory sessionFactory, IEqualityComparer? entityEqualityComparer)
             : this(sessionFactory.OpenSession(), entityEqualityComparer)
         {
         }
@@ -28,7 +29,7 @@ namespace NHibernate.PersistenceTesting
         {
         }
 
-        public PersistenceSpecification(ISession session, IEqualityComparer entityEqualityComparer)
+        public PersistenceSpecification(ISession session, IEqualityComparer? entityEqualityComparer)
         {
             currentSession = session;
             var transaction = currentSession.Transaction;
@@ -59,7 +60,7 @@ namespace NHibernate.PersistenceTesting
             currentSession.Clear();
 
             // "Find" the same entity from the second IRepository
-            var second = currentSession.Get<T>(firstId);
+            var second = currentSession.Get<T?>(firstId);
 
             if (second == null)
             {
@@ -99,14 +100,14 @@ namespace NHibernate.PersistenceTesting
             return RegisterCheckedProperty(property, null);
         }
 
-        public PersistenceSpecification<T> RegisterCheckedPropertyWithoutTransactionalSave(Property<T> property, IEqualityComparer equalityComparer)
+        public PersistenceSpecification<T> RegisterCheckedPropertyWithoutTransactionalSave(Property<T> property, IEqualityComparer? equalityComparer)
         {
             property.EntityEqualityComparer = equalityComparer ?? entityEqualityComparer;
             allProperties.Add(property);
 
             return this;
         }
-        public PersistenceSpecification<T> RegisterCheckedProperty(Property<T> property, IEqualityComparer equalityComparer)
+        public PersistenceSpecification<T> RegisterCheckedProperty(Property<T> property, IEqualityComparer? equalityComparer)
         {
             property.EntityEqualityComparer = equalityComparer ?? entityEqualityComparer;
             allProperties.Add(property);

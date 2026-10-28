@@ -12,7 +12,7 @@ namespace NHibernate.PersistenceTesting.Utils
         public abstract System.Type PropertyType { get; }
         public abstract bool CanWrite { get; }
         public abstract MemberInfo MemberInfo { get; }
-        public abstract System.Type DeclaringType { get; }
+        public abstract System.Type? DeclaringType { get; }
         public abstract bool HasIndexParameters { get; }
         public abstract bool IsMethod { get; }
         public abstract bool IsField { get; }
@@ -23,12 +23,12 @@ namespace NHibernate.PersistenceTesting.Utils
         public abstract bool IsPublic { get; }
         public abstract bool IsInternal { get; }
 
-        public bool Equals(Member other)
+        public bool Equals(Member? other)
         {
             return other != null && other.MemberInfo.MetadataToken == this.MemberInfo.MetadataToken && Equals(other.MemberInfo.Module, this.MemberInfo.Module);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -41,18 +41,18 @@ namespace NHibernate.PersistenceTesting.Utils
             return this.MemberInfo.GetHashCode() ^ 3;
         }
 
-        public static bool operator ==(Member left, Member right)
+        public static bool operator ==(Member? left, Member? right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(Member left, Member right)
+        public static bool operator !=(Member? left, Member? right)
         {
             return !Equals(left, right);
         }
 
-        public abstract void SetValue(object target, object value);
-        public abstract object GetValue(object target);
+        public abstract void SetValue(object target, object? value);
+        public abstract object? GetValue(object target);
     }
 
     [Serializable]
@@ -60,12 +60,12 @@ namespace NHibernate.PersistenceTesting.Utils
     {
         private readonly MethodInfo member;
 
-        public override void SetValue(object target, object value)
+        public override void SetValue(object target, object? value)
         {
             throw new NotSupportedException("Cannot set the value of a method Member.");
         }
 
-        public override object GetValue(object target)
+        public override object? GetValue(object target)
         {
             return this.member.Invoke(target, null);
         }
@@ -91,7 +91,7 @@ namespace NHibernate.PersistenceTesting.Utils
         {
             get { return this.member; }
         }
-        public override System.Type DeclaringType
+        public override System.Type? DeclaringType
         {
             get { return this.member.DeclaringType; }
         }
@@ -153,12 +153,12 @@ namespace NHibernate.PersistenceTesting.Utils
     {
         private readonly FieldInfo member;
 
-        public override void SetValue(object target, object value)
+        public override void SetValue(object target, object? value)
         {
             this.member.SetValue(target, value);
         }
 
-        public override object GetValue(object target)
+        public override object? GetValue(object target)
         {
             return this.member.GetValue(target);
         }
@@ -184,7 +184,7 @@ namespace NHibernate.PersistenceTesting.Utils
         {
             get { return this.member; }
         }
-        public override System.Type DeclaringType
+        public override System.Type? DeclaringType
         {
             get { return this.member.DeclaringType; }
         }
@@ -240,8 +240,8 @@ namespace NHibernate.PersistenceTesting.Utils
     internal class PropertyMember : Member
     {
         readonly PropertyInfo member;
-        readonly MethodMember getMethod;
-        readonly MethodMember setMethod;
+        readonly MethodMember? getMethod;
+        readonly MethodMember? setMethod;
 
         public PropertyMember(PropertyInfo member)
         {
@@ -250,7 +250,7 @@ namespace NHibernate.PersistenceTesting.Utils
             this.setMethod = this.GetMember(member.GetSetMethod(true));
         }
 
-        private MethodMember GetMember(MethodInfo method)
+        private MethodMember? GetMember(MethodInfo? method)
         {
             if (method == null)
                 return null;
@@ -258,12 +258,12 @@ namespace NHibernate.PersistenceTesting.Utils
             return (MethodMember)method.ToMember();
         }
 
-        public override void SetValue(object target, object value)
+        public override void SetValue(object target, object? value)
         {
             this.member.SetValue(target, value, null);
         }
 
-        public override object GetValue(object target)
+        public override object? GetValue(object target)
         {
             return this.member.GetValue(target, null);
         }
@@ -293,7 +293,7 @@ namespace NHibernate.PersistenceTesting.Utils
         {
             get { return this.member; }
         }
-        public override System.Type DeclaringType
+        public override System.Type? DeclaringType
         {
             get { return this.member.DeclaringType; }
         }
@@ -343,12 +343,12 @@ namespace NHibernate.PersistenceTesting.Utils
             get { return this.getMethod?.IsInternal ?? false; }
         }
 
-        public MethodMember Get
+        public MethodMember? Get
         {
             get { return this.getMethod; }
         }
 
-        public MethodMember Set
+        public MethodMember? Set
         {
             get { return this.setMethod; }
         }

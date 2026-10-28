@@ -18,27 +18,29 @@ namespace NHibernate.PersistenceTesting.Utils
 
         #region Accessor Members
 
-        public void SetValue(object target, object propertyValue)
+        public void SetValue(object target, object? propertyValue)
         {
-            target = findInnerMostTarget(target);
-            if (target == null)
+            object? t = target;
+            t = findInnerMostTarget(t);
+            if (t == null)
             {
                 return;
             }
 
-            innerMember.SetValue(target, propertyValue);
+            innerMember.SetValue(t, propertyValue);
         }
 
-        public object GetValue(object target)
+        public object? GetValue(object target)
         {
-            target = findInnerMostTarget(target);
+            object? t = target;
+            t = findInnerMostTarget(t);
 
-            if (target == null)
+            if (t == null)
             {
                 return null;
             }
 
-            return innerMember.GetValue(target);
+            return innerMember.GetValue(t);
         }
 
         public System.Type PropertyType
@@ -64,18 +66,19 @@ namespace NHibernate.PersistenceTesting.Utils
 
         #endregion
 
-        private object findInnerMostTarget(object target)
+        private object? findInnerMostTarget(object target)
         {
+            object? t = target;
             foreach (var info in _chain)
             {
-                target = info.GetValue(target);
-                if (target == null)
+                t = info.GetValue(t);
+                if (t == null)
                 {
                     return null;
                 }
             }
 
-            return target;
+            return t;
         }
     }
 }

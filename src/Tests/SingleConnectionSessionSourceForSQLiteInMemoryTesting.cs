@@ -18,7 +18,7 @@ namespace Tests
     {
         public ISessionFactory SessionFactory { get; private set; }
         public Configuration Configuration { get; private set; }
-        private ISession session;
+        private ISession? session;
 
         public SingleConnectionSessionSourceForSQLiteInMemoryTesting(Configuration config, HbmMapping model)
         {

@@ -20,7 +20,7 @@ namespace Tests.Testing.Values
             List = new List<string>();
         }
 
-        public IEnumerable<string> GetterAndSetter { get; set; }
+        public IEnumerable<string>? GetterAndSetter { get; set; }
         public IEnumerable<string> GetterAndPrivateSetter { get; private set; }
         public IEnumerable<string> BackingField
         {
@@ -30,7 +30,7 @@ namespace Tests.Testing.Values
         public ISet<string> TypedSet { get; set; }
         //public ISet Set { get; set; }
         public ICollection Collection { get; set; }
-        public string[] Array { get; set; }
+        public string[]? Array { get; set; }
         public IList<string> List { get; set; }
 
         public void AddListItem(string value)
@@ -46,7 +46,7 @@ namespace Tests.Testing.Values
             ReferenceList = new List<OtherEntity>();
         }
 
-        public OtherEntity Reference { get; set; }
+        public OtherEntity? Reference { get; set; }
         public IEnumerable<OtherEntity> ReferenceList { get; set; }
 
         public void SetReference(OtherEntity value)
@@ -57,17 +57,17 @@ namespace Tests.Testing.Values
 
     public class PropertyEntity
     {
-        private string backingField;
+        private string? backingField;
 
-        public string GetterAndSetter { get; set; }
-        public string GetterAndPrivateSetter { get; private set; }
+        public string? GetterAndSetter { get; set; }
+        public string? GetterAndPrivateSetter { get; private set; }
 
-        public string BackingField
+        public string? BackingField
         {
             get { return backingField; }
         }
 
-        public void SetBackingField(string value)
+        public void SetBackingField(string? value)
         {
             backingField = value;
         }

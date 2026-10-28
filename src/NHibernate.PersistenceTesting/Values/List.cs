@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NHibernate.PersistenceTesting.Utils;
 
@@ -9,18 +10,20 @@ namespace NHibernate.PersistenceTesting.Values
     public class List<T, TListElement> : Property<T, IEnumerable<TListElement>>
         where T : class
     {
-        private readonly IEnumerable<TListElement> _expected;
-        private Action<T, Accessor, IEnumerable<TListElement>> _valueSetter;
+        private readonly IEnumerable<TListElement>? _expected;
+        private Action<T, Accessor, IEnumerable<TListElement>>? _valueSetter;
 
-        public List(Accessor property, IEnumerable<TListElement> value)
+        public List(Accessor property, IEnumerable<TListElement>? value)
             : base(property, value)
         {
             _expected = value;
         }
 
-        public override Action<T, Accessor, IEnumerable<TListElement>> ValueSetter
+        [AllowNull] public override Action<T, Accessor, IEnumerable<TListElement>> ValueSetter
         {
+#pragma warning disable CS8609 // Nullability of reference types in return type doesn't match overridden member.
             get
+#pragma warning restore CS8609 // Nullability of reference types in return type doesn't match overridden member.
             {
                 var customSetter = _valueSetter;
                 if (customSetter != null)
@@ -53,7 +56,7 @@ namespace NHibernate.PersistenceTesting.Values
                     }
                     else if (propertyAccessor.PropertyType.IsArray)
                     {
-                        collection = Array.CreateInstance(typeof(TListElement), expected.Count());
+                        collection = new TListElement[expected.Count()];
                         Array.Copy((Array)expected, (Array)collection, expected.Count());
                     }
                     else
@@ -67,7 +70,7 @@ namespace NHibernate.PersistenceTesting.Values
             set { _valueSetter = value; }
         }
 
-        protected IEnumerable<TListElement> Expected
+        protected IEnumerable<TListElement>? Expected
         {
             get { return _expected; }
         }
@@ -78,7 +81,7 @@ namespace NHibernate.PersistenceTesting.Values
             AssertGenericListMatches(actual, Expected);
         }
 
-        private void AssertGenericListMatches(IEnumerable actualEnumerable, IEnumerable<TListElement> expectedEnumerable)
+        private void AssertGenericListMatches(IEnumerable? actualEnumerable, IEnumerable<TListElement>? expectedEnumerable)
         {
             if (actualEnumerable == null)
             {
@@ -104,7 +107,7 @@ namespace NHibernate.PersistenceTesting.Values
                 throw new ApplicationException(String.Format("Actual count ({0}) does not equal expected count ({1})", actualList.Count, expectedList.Count));
             }
 
-            var equalsFunc = (EntityEqualityComparer != null) ? ((a, b) => EntityEqualityComparer.Equals(a, b)): new Func<object, object, bool>(Equals);
+            var equalsFunc = (EntityEqualityComparer != null) ? ((a, b) => EntityEqualityComparer.Equals(a, b)): new Func<object?, object?, bool>(Equals);
 
             for (var i = 0; i < actualList.Count; i++)
             {

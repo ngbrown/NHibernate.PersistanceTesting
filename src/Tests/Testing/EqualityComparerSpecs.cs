@@ -8,7 +8,7 @@ namespace Tests.Testing
     public class With_DateTimeEqualityComparer_specification : Specification
     {
         protected DateTime originalDateTime;
-        protected EqualityComparer<DateTime> equalityComparer;
+        protected EqualityComparer<DateTime>? equalityComparer;
 
         public override void establish_context()
         {
@@ -49,7 +49,7 @@ namespace Tests.Testing
     public class With_DateTimeOffsetEqualityComparer_specification : Specification
     {
         protected DateTimeOffset originalDateTime;
-        protected EqualityComparer<DateTimeOffset> equalityComparer;
+        protected EqualityComparer<DateTimeOffset>? equalityComparer;
 
         public override void establish_context()
         {
