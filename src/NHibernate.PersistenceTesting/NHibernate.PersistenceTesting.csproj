@@ -8,6 +8,7 @@
     <PackageTags>NHibernate testing tdd</PackageTags>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>Quickly test your NHibernate mappings using the PersistenceSpecification class</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Company>https://github.com/ngbrown/NHibernate.PersistanceTesting</Company>
     <Authors>Nathan Brown, James Gregory, and contributors</Authors>
     <RepositoryUrl>https://github.com/ngbrown/NHibernate.PersistanceTesting</RepositoryUrl>
@@ -21,6 +22,10 @@
     <NHibernateVersion Condition="'$(TargetFramework)' == 'net6.0' Or '$(TargetFramework)' == 'net8.0'">[5.4.0, 6.0.0)</NHibernateVersion>
     <NHibernateVersion Condition="'$(TargetFramework)' == 'net9.0' Or '$(TargetFramework)' == 'net10.0'">[5.5.2, 6.0.0)</NHibernateVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Link="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="NHibernate" Version="$(NHibernateVersion)" />
