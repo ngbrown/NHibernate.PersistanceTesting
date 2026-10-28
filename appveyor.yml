@@ -9,19 +9,20 @@ build_script:
     if (${env:APPVEYOR_REPO_TAG} -eq $true) {
       $env:semver = $env:APPVEYOR_REPO_TAG_NAME
       dotnet build .\src\NHibernate.PersistenceTesting.sln --configuration $env:CONFIGURATION "-p:VersionPrefix=${env:semver}"
-      dotnet pack .\src\NHibernate.PersistenceTesting\NHibernate.PersistenceTesting.csproj --configuration $env:CONFIGURATION --include-symbols --output ./ "-p:VersionPrefix=${env:semver}"
+      dotnet pack .\src\NHibernate.PersistenceTesting\NHibernate.PersistenceTesting.csproj --configuration $env:CONFIGURATION -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg --output ./ "-p:VersionPrefix=${env:semver}"
     } else {
       $env:semver = $env:APPVEYOR_BUILD_VERSION -ireplace '(\d+.\d+.\d+).(\d+)', "`$1"
       $suffix = "ci-${env:APPVEYOR_BUILD_NUMBER}-${env:APPVEYOR_REPO_BRANCH}"
       $env:suffix = $suffix.Substring(0, [System.Math]::Min(10, $suffix.Length))
       dotnet build .\src\NHibernate.PersistenceTesting.sln --configuration $env:CONFIGURATION "-p:VersionPrefix=${env:semver}" --version-suffix $env:suffix
-      dotnet pack .\src\NHibernate.PersistenceTesting\NHibernate.PersistenceTesting.csproj --configuration $env:CONFIGURATION --include-symbols --output ./ "-p:VersionPrefix=${env:semver}" --version-suffix $env:suffix
+      dotnet pack .\src\NHibernate.PersistenceTesting\NHibernate.PersistenceTesting.csproj --configuration $env:CONFIGURATION -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg --output ./ "-p:VersionPrefix=${env:semver}" --version-suffix $env:suffix
     }
 test_script:
 - ps: >-
     dotnet test .\src\Tests\Tests.csproj --no-build --configuration Release -p:Platform=AnyCPU --logger:Appveyor
 artifacts:
 - path: '*.nupkg'
+- path: '*.snupkg'
 deploy:
 - provider: Environment
   name: NuGet.org
