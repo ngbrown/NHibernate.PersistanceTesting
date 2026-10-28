@@ -396,6 +396,63 @@ namespace Tests.Testing.Values
         }
     }
 
+    [TestFixture]
+    public class When_a_null_expected_list_is_set
+    {
+        [TestCase(typeof(IList<string>))]
+        [TestCase(typeof(ISet<string>))]
+        [TestCase(typeof(string[]))]
+        public void should_fail_before_assigning_a_collection(Type collectionType)
+        {
+            var property = A.Fake<Accessor>();
+            A.CallTo(() => property.PropertyType).Returns(collectionType);
+            A.CallTo(() => property.Name).Returns("Collection");
+            var target = new ListEntity();
+            var sut = new List<ListEntity, string>(property, null);
+
+            var exception = Assert.Throws<ApplicationException>(() => sut.SetValue(target));
+
+            Assert.That(exception!.Message, Is.EqualTo("Error while trying to set property Collection"));
+            Assert.That(exception.InnerException, Is.TypeOf<ArgumentNullException>());
+            Assert.That(((ArgumentNullException)exception.InnerException!).ParamName, Is.EqualTo("Expected"));
+            A.CallTo(() => property.SetValue(target, A<object>._)).MustNotHaveHappened();
+        }
+    }
+
+    [TestFixture]
+    public class When_a_null_expected_list_has_a_custom_setter
+    {
+        [TestCase(false)]
+        [TestCase(true)]
+        public void should_reject_null_before_invoking_the_custom_setter(bool invokeDelegateDirectly)
+        {
+            var property = A.Fake<Accessor>();
+            A.CallTo(() => property.Name).Returns("Collection");
+            var target = new ListEntity();
+            var customSetter = A.Fake<Action<ListEntity, Accessor, IEnumerable<string>>>();
+            var list = new List<ListEntity, string>(property, null) { ValueSetter = customSetter };
+            Property<ListEntity, IEnumerable<string>> sut = list;
+
+            ArgumentNullException nullException;
+            if (invokeDelegateDirectly)
+            {
+                nullException = Assert.Throws<ArgumentNullException>(() => sut.ValueSetter(target, property, null))!;
+            }
+            else
+            {
+                var exception = Assert.Throws<ApplicationException>(() => sut.SetValue(target));
+                Assert.That(exception!.Message, Is.EqualTo("Error while trying to set property Collection"));
+                Assert.That(exception.InnerException, Is.TypeOf<ArgumentNullException>());
+                nullException = (ArgumentNullException)exception.InnerException!;
+            }
+
+            Assert.That(nullException.ParamName, Is.EqualTo("value"));
+            A.CallTo(() => customSetter(target, property, A<IEnumerable<string>>._))
+                .WithAnyArguments().MustNotHaveHappened();
+            A.CallTo(() => property.SetValue(target, A<object>._)).MustNotHaveHappened();
+        }
+    }
+
     public class When_the_checked_list_is_equal_to_the_expected_list_with_a_custom_equality_comparer : When_the_checked_list_is_equal_to_the_expected_list
     {
         public override void establish_context()

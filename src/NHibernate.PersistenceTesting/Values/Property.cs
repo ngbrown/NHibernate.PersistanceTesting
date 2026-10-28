@@ -89,11 +89,11 @@ namespace NHibernate.PersistenceTesting.Values
         {
             string message;
 
-            string actualToPrint = actual != null ? actual.ToString() : "(null)";
-            string actualTypeToPrint = PropertyAccessor.PropertyType.FullName;
+            string actualToPrint = actual?.ToString() ?? "(null)";
+            string actualTypeToPrint = PropertyAccessor.PropertyType.FullName ?? PropertyAccessor.PropertyType.Name;
 
-            string valueToPrint = Value != null ? Value.ToString() : "(null)";
-            string valueTypeToPrint = Value != null ? Value.GetType().FullName : "(null)";
+            string valueToPrint = Value?.ToString() ?? "(null)";
+            string valueTypeToPrint = Value?.GetType().FullName ?? Value?.GetType().Name ?? "(null)";
 
             if (actualToPrint != valueToPrint && actualTypeToPrint != valueTypeToPrint)
             {

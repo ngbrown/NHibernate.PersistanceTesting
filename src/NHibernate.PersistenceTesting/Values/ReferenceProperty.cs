@@ -11,7 +11,11 @@ namespace NHibernate.PersistenceTesting.Values
 
         public override void HasRegistered(PersistenceSpecification<T> specification)
         {
-            specification.TransactionalSave(Value);
+            TProperty value = Value;
+            if (value != null)
+            {
+                specification.TransactionalSave(value);
+            }
         }
     }
 }

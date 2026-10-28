@@ -29,6 +29,8 @@ namespace NHibernate.PersistenceTesting
 
             if (typeof(TProperty).IsArray)
             {
+                if (propertyValue == null) throw new ArgumentNullException(nameof(propertyValue));
+
                 // Func matching return value as TProperty is more specific than matching Array or TListElement[],
                 // so have to use reflection in array case instead of relying on generic matching.
                 return spec.RegisterCheckedProperty(ListConstructor<T, TProperty>.Create(property, propertyValue), propertyComparer);
@@ -221,7 +223,7 @@ namespace NHibernate.PersistenceTesting
             // Because of the params keyword, the compiler can select this overload
             // instead of the one above, even when no funcs are supplied in the method call.
             if (propertiesToCompare == null || propertiesToCompare.Length == 0)
-                return spec.CheckList(expression, propertyValue, (IEqualityComparer)null);
+                return spec.CheckInverseList(expression, propertyValue, (IEqualityComparer?)null);
 
             return spec.CheckInverseList(expression, propertyValue, new FuncEqualityComparer<TListElement>(propertiesToCompare));
         }
@@ -608,6 +610,9 @@ namespace NHibernate.PersistenceTesting
 
             public override bool Equals(T x, T y)
             {
+                if (ReferenceEquals(x, y)) return true;
+                if (x == null) return false;
+                if (y == null) return false;
                 return comparisons.All(func => object.Equals(func(x), func(y)));
             }
 
@@ -627,10 +632,12 @@ namespace NHibernate.PersistenceTesting
             {
                 if (listConstructor == null)
                 {
-                    var elementType = typeof(TProperty).GetElementType();
+                    var elementType = typeof(TProperty).GetElementType()
+                        ?? throw new InvalidOperationException("Expected an array property type.");
                     var ienumerableType = typeof(IEnumerable<>).MakeGenericType(elementType);
                     var listType = typeof(List<,>).MakeGenericType(typeof(T), elementType);
-                    listConstructor = listType.GetConstructor(new[] {typeof(Accessor), ienumerableType});
+                    listConstructor = listType.GetConstructor(new[] {typeof(Accessor), ienumerableType})
+                        ?? throw new InvalidOperationException("Could not find the list property constructor.");
                 }
 
                 return (Property<T>)listConstructor.Invoke(new object[] { property, propertyValue });

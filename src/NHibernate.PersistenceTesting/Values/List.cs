@@ -22,13 +22,25 @@ namespace NHibernate.PersistenceTesting.Values
         {
             get
             {
-                if (_valueSetter != null)
+                var customSetter = _valueSetter;
+                if (customSetter != null)
                 {
-                    return _valueSetter;
+                    return (target, propertyAccessor, value) =>
+                    {
+                        if (value == null)
+                        {
+                            throw new ArgumentNullException(nameof(value),
+                                "The expected list cannot be null. Use an empty collection to check for no items.");
+                        }
+
+                        customSetter(target, propertyAccessor, value);
+                    };
                 }
 
                 return (target, propertyAccessor, value) =>
                 {
+                    var expected = Expected ?? throw new ArgumentNullException(nameof(Expected),
+                        "The expected list cannot be null. Use an empty collection to check for no items.");
                     object collection;
 
                     // sorry guys - create an instance of the collection type because we can't rely
@@ -37,16 +49,16 @@ namespace NHibernate.PersistenceTesting.Values
                     // infallible.
                     if (propertyAccessor.PropertyType.IsAssignableFrom(typeof(ISet<TListElement>)))
                     {
-                        collection = new HashSet<TListElement>(Expected.ToList());
+                        collection = new HashSet<TListElement>(expected.ToList());
                     }
                     else if (propertyAccessor.PropertyType.IsArray)
                     {
-                        collection = Array.CreateInstance(typeof(TListElement), Expected.Count());
-                        Array.Copy((Array)Expected, (Array)collection, Expected.Count());
+                        collection = Array.CreateInstance(typeof(TListElement), expected.Count());
+                        Array.Copy((Array)expected, (Array)collection, expected.Count());
                     }
                     else
                     {
-                        collection = new List<TListElement>(Expected);
+                        collection = new List<TListElement>(expected);
                     }
 
                     propertyAccessor.SetValue(target, collection);

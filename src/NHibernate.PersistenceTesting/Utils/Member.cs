@@ -25,7 +25,7 @@ namespace NHibernate.PersistenceTesting.Utils
 
         public bool Equals(Member other)
         {
-            return Equals(other.MemberInfo.MetadataToken, this.MemberInfo.MetadataToken) && Equals(other.MemberInfo.Module, this.MemberInfo.Module);
+            return other != null && other.MemberInfo.MetadataToken == this.MemberInfo.MetadataToken && Equals(other.MemberInfo.Module, this.MemberInfo.Module);
         }
 
         public override bool Equals(object obj)
@@ -250,7 +250,7 @@ namespace NHibernate.PersistenceTesting.Utils
             this.setMethod = this.GetMember(member.GetSetMethod(true));
         }
 
-        MethodMember GetMember(MethodInfo method)
+        private MethodMember GetMember(MethodInfo method)
         {
             if (method == null)
                 return null;
@@ -325,22 +325,22 @@ namespace NHibernate.PersistenceTesting.Utils
 
         public override bool IsPrivate
         {
-            get { return this.getMethod.IsPrivate; }
+            get { return this.getMethod?.IsPrivate ?? false; }
         }
 
         public override bool IsProtected
         {
-            get { return this.getMethod.IsProtected; }
+            get { return this.getMethod?.IsProtected ?? false; }
         }
 
         public override bool IsPublic
         {
-            get { return this.getMethod.IsPublic; }
+            get { return this.getMethod?.IsPublic ?? false; }
         }
 
         public override bool IsInternal
         {
-            get { return this.getMethod.IsInternal; }
+            get { return this.getMethod?.IsInternal ?? false; }
         }
 
         public MethodMember Get
